@@ -1,0 +1,101 @@
+[
+  {
+    "pergunta": "O que é uma variável em Python?",
+    "categoria_esperada": "Fundamentos de Python",
+    "id_esperado": "python-variaveis"
+  },
+  {
+    "pergunta": "Como uso if e else?",
+    "categoria_esperada": "Fundamentos de Python",
+    "id_esperado": "python-condicionais"
+  },
+  {
+    "pergunta": "Qual a diferença entre for e while?",
+    "categoria_esperada": "Fundamentos de Python",
+    "id_esperado": "python-loops"
+  },
+  {
+    "pergunta": "Como adicionar um item em uma lista?",
+    "categoria_esperada": "Fundamentos de Python",
+    "id_esperado": "python-listas"
+  },
+  {
+    "pergunta": "Para que serve return?",
+    "categoria_esperada": "Fundamentos de Python",
+    "id_esperado": "python-funcoes"
+  },
+  {
+    "pergunta": "Como corrigir ModuleNotFoundError no pandas?",
+    "categoria_esperada": "Erros comuns",
+    "id_esperado": "erro-modulenotfound"
+  },
+  {
+    "pergunta": "List index out of range",
+    "categoria_esperada": "Erros comuns",
+    "id_esperado": "erro-indexerror"
+  },
+  {
+    "pergunta": "Como criar uma venv?",
+    "categoria_esperada": "Ambiente de desenvolvimento",
+    "id_esperado": "venv-criar"
+  },
+  {
+    "pergunta": "Como ler um CSV com pandas?",
+    "categoria_esperada": "Pandas",
+    "id_esperado": "pandas-readcsv"
+  },
+  {
+    "pergunta": "Como preencher valores NaN?",
+    "categoria_esperada": "Pandas",
+    "id_esperado": "pandas-nulos"
+  },
+  {
+    "pergunta": "Como agrupar vendas por categoria?",
+    "categoria_esperada": "Pandas",
+    "id_esperado": "pandas-groupby"
+  },
+  {
+    "pergunta": "Como remover linhas duplicadas?",
+    "categoria_esperada": "Pandas",
+    "id_esperado": "pandas-duplicados"
+  },
+  {
+    "pergunta": "Como trabalhar com caminhos de arquivos?",
+    "categoria_esperada": "Automação",
+    "id_esperado": "python-pathlib"
+  },
+  {
+    "pergunta": "Como agendar um script Python no Windows?",
+    "categoria_esperada": "Automação",
+    "id_esperado": "automacao-agendamento"
+  },
+  {
+    "pergunta": "Como fazer commit e push?",
+    "categoria_esperada": "Git e GitHub",
+    "id_esperado": "git-basico"
+  },
+  {
+    "pergunta": "Como não enviar o .env para o GitHub?",
+    "categoria_esperada": "Git e GitHub",
+    "id_esperado": "git-ignore"
+  },
+  {
+    "pergunta": "O que é alucinação em IA?",
+    "categoria_esperada": "Inteligência Artificial",
+    "id_esperado": "ia-alucinacao"
+  },
+  {
+    "pergunta": "Como funciona RAG?",
+    "categoria_esperada": "Inteligência Artificial",
+    "id_esperado": "ia-rag"
+  },
+  {
+    "pergunta": "Qual a ordem para aprender Python?",
+    "categoria_esperada": "Trilha de estudos",
+    "id_esperado": "trilha-iniciante"
+  },
+  {
+    "pergunta": "Qual é a previsão do tempo de amanhã?",
+    "deve_recusar": true
+  }
+]

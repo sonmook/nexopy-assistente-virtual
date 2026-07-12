@@ -1,0 +1,661 @@
+[
+  {
+    "id": "python-variaveis",
+    "categoria": "Fundamentos de Python",
+    "titulo": "Variáveis em Python",
+    "perguntas": [
+      "O que é uma variável em Python?",
+      "Como guardar um valor em Python?",
+      "Como criar variáveis?"
+    ],
+    "palavras_chave": [
+      "variável",
+      "atribuição",
+      "valor",
+      "nome",
+      "tipo"
+    ],
+    "resposta": "Uma variável é um nome usado para guardar um valor durante a execução do programa. Em Python, você cria uma variável usando o operador de atribuição `=`.",
+    "exemplo": "nome = \"Emerson\"\nidade = 25\nprint(nome, idade)",
+    "proximo_passo": "Depois de variáveis, estude tipos de dados e operadores."
+  },
+  {
+    "id": "python-tipos",
+    "categoria": "Fundamentos de Python",
+    "titulo": "Tipos de dados",
+    "perguntas": [
+      "Quais são os tipos de dados em Python?",
+      "O que são str int float e bool?",
+      "Como saber o tipo de uma variável?"
+    ],
+    "palavras_chave": [
+      "str",
+      "int",
+      "float",
+      "bool",
+      "type",
+      "tipo de dado"
+    ],
+    "resposta": "Os tipos básicos mais usados são `str` para textos, `int` para números inteiros, `float` para números decimais e `bool` para valores verdadeiros ou falsos. A função `type()` mostra o tipo de um valor.",
+    "exemplo": "valor = 10.5\nprint(type(valor))  # <class 'float'>",
+    "proximo_passo": "Pratique conversões com int(), float() e str()."
+  },
+  {
+    "id": "python-condicionais",
+    "categoria": "Fundamentos de Python",
+    "titulo": "Condições com if, elif e else",
+    "perguntas": [
+      "Como funciona if em Python?",
+      "Como criar uma condição?",
+      "Qual a diferença entre if elif e else?"
+    ],
+    "palavras_chave": [
+      "if",
+      "elif",
+      "else",
+      "condição",
+      "comparação"
+    ],
+    "resposta": "`if` executa um bloco quando uma condição é verdadeira. `elif` testa outra condição quando a anterior falha, e `else` trata os demais casos.",
+    "exemplo": "idade = 18\nif idade >= 18:\n    print(\"Maior de idade\")\nelse:\n    print(\"Menor de idade\")",
+    "proximo_passo": "Em seguida, estude operadores lógicos como and, or e not."
+  },
+  {
+    "id": "python-loops",
+    "categoria": "Fundamentos de Python",
+    "titulo": "Laços for e while",
+    "perguntas": [
+      "Como funciona for em Python?",
+      "Quando usar while?",
+      "Como repetir uma ação?"
+    ],
+    "palavras_chave": [
+      "for",
+      "while",
+      "loop",
+      "repetição",
+      "range"
+    ],
+    "resposta": "`for` é indicado para percorrer coleções ou uma quantidade conhecida de itens. `while` repete enquanto uma condição continuar verdadeira.",
+    "exemplo": "for numero in range(1, 6):\n    print(numero)",
+    "proximo_passo": "Pratique break, continue e laços dentro de listas."
+  },
+  {
+    "id": "python-listas",
+    "categoria": "Fundamentos de Python",
+    "titulo": "Listas",
+    "perguntas": [
+      "O que é uma lista em Python?",
+      "Como adicionar itens em uma lista?",
+      "Como acessar um elemento da lista?"
+    ],
+    "palavras_chave": [
+      "lista",
+      "list",
+      "append",
+      "índice",
+      "coleção"
+    ],
+    "resposta": "Uma lista armazena vários valores em uma única variável. Os elementos são ordenados e podem ser acessados por índice, começando em zero.",
+    "exemplo": "frutas = [\"maçã\", \"banana\"]\nfrutas.append(\"uva\")\nprint(frutas[0])",
+    "proximo_passo": "Depois, estude tuplas, conjuntos e dicionários."
+  },
+  {
+    "id": "python-dicionarios",
+    "categoria": "Fundamentos de Python",
+    "titulo": "Dicionários",
+    "perguntas": [
+      "O que é um dicionário em Python?",
+      "Como usar chave e valor?",
+      "Como acessar dados de um dict?"
+    ],
+    "palavras_chave": [
+      "dicionário",
+      "dict",
+      "chave",
+      "valor",
+      "get"
+    ],
+    "resposta": "Um dicionário guarda dados em pares de chave e valor. Ele é útil para representar informações estruturadas, como os dados de uma pessoa ou de um produto.",
+    "exemplo": "usuario = {\"nome\": \"Ana\", \"nivel\": \"iniciante\"}\nprint(usuario[\"nome\"])",
+    "proximo_passo": "Pratique percorrer dicionários com items()."
+  },
+  {
+    "id": "python-funcoes",
+    "categoria": "Fundamentos de Python",
+    "titulo": "Funções",
+    "perguntas": [
+      "Como criar uma função em Python?",
+      "Para que serve def?",
+      "O que é return?"
+    ],
+    "palavras_chave": [
+      "função",
+      "def",
+      "return",
+      "parâmetro",
+      "argumento"
+    ],
+    "resposta": "Uma função agrupa instruções que podem ser reutilizadas. Ela é criada com `def`, pode receber parâmetros e pode devolver um resultado com `return`.",
+    "exemplo": "def somar(a, b):\n    return a + b\n\nresultado = somar(2, 3)\nprint(resultado)",
+    "proximo_passo": "Depois, estude argumentos nomeados, valores padrão e escopo."
+  },
+  {
+    "id": "python-excecoes",
+    "categoria": "Fundamentos de Python",
+    "titulo": "Tratamento de exceções",
+    "perguntas": [
+      "Como tratar erros em Python?",
+      "Para que serve try e except?",
+      "Como impedir que o programa pare com erro?"
+    ],
+    "palavras_chave": [
+      "try",
+      "except",
+      "finally",
+      "erro",
+      "exceção"
+    ],
+    "resposta": "`try` executa um trecho que pode falhar. `except` trata uma exceção esperada. Evite usar `except:` sem indicar o tipo do erro, porque isso pode esconder problemas.",
+    "exemplo": "try:\n    numero = int(input(\"Digite um número: \"))\nexcept ValueError:\n    print(\"Digite apenas números inteiros.\")",
+    "proximo_passo": "Estude também else, finally e criação de mensagens de erro claras."
+  },
+  {
+    "id": "python-arquivos",
+    "categoria": "Automação",
+    "titulo": "Leitura e escrita de arquivos",
+    "perguntas": [
+      "Como abrir um arquivo em Python?",
+      "Como ler um arquivo txt?",
+      "Como salvar texto em um arquivo?"
+    ],
+    "palavras_chave": [
+      "arquivo",
+      "open",
+      "read",
+      "write",
+      "with",
+      "txt"
+    ],
+    "resposta": "Use `open()` junto com `with` para garantir que o arquivo seja fechado corretamente. O modo `r` lê, `w` substitui o conteúdo e `a` adiciona no final.",
+    "exemplo": "with open(\"dados.txt\", \"r\", encoding=\"utf-8\") as arquivo:\n    conteudo = arquivo.read()\n    print(conteudo)",
+    "proximo_passo": "Depois, pratique arquivos CSV e caminhos com pathlib."
+  },
+  {
+    "id": "python-pathlib",
+    "categoria": "Automação",
+    "titulo": "Caminhos com pathlib",
+    "perguntas": [
+      "Como trabalhar com pastas em Python?",
+      "Para que serve pathlib?",
+      "Como verificar se um arquivo existe?"
+    ],
+    "palavras_chave": [
+      "pathlib",
+      "Path",
+      "pasta",
+      "caminho",
+      "exists"
+    ],
+    "resposta": "`pathlib` oferece uma forma moderna e portátil de trabalhar com arquivos e pastas. A classe `Path` funciona em Windows, Linux e macOS.",
+    "exemplo": "from pathlib import Path\n\narquivo = Path(\"dados\") / \"clientes.csv\"\nprint(arquivo.exists())",
+    "proximo_passo": "Pratique mkdir(), glob() e leitura com read_text()."
+  },
+  {
+    "id": "python-modulos",
+    "categoria": "Organização de projetos",
+    "titulo": "Módulos e imports",
+    "perguntas": [
+      "O que é um módulo em Python?",
+      "Como importar outro arquivo Python?",
+      "Como organizar o código em arquivos?"
+    ],
+    "palavras_chave": [
+      "módulo",
+      "import",
+      "pacote",
+      "__init__",
+      "arquivo py"
+    ],
+    "resposta": "Um módulo é um arquivo `.py` que contém funções, classes ou variáveis reutilizáveis. Separar responsabilidades em módulos deixa o projeto mais fácil de testar e manter.",
+    "exemplo": "from utilidades.calculos import somar",
+    "proximo_passo": "Depois, aprenda sobre pacotes, __init__.py e ambientes virtuais."
+  },
+  {
+    "id": "erro-modulenotfound",
+    "categoria": "Erros comuns",
+    "titulo": "ModuleNotFoundError",
+    "perguntas": [
+      "Como corrigir ModuleNotFoundError?",
+      "Python não encontra a biblioteca",
+      "No module named pandas"
+    ],
+    "palavras_chave": [
+      "ModuleNotFoundError",
+      "módulo",
+      "biblioteca",
+      "pip",
+      "import"
+    ],
+    "resposta": "Esse erro aparece quando o Python não encontra o módulo importado. Verifique o nome, ative o ambiente virtual correto e instale a dependência com `python -m pip install nome-da-biblioteca`.",
+    "exemplo": "python -m pip install pandas",
+    "proximo_passo": "Confirme o interpretador com: python -c \"import sys; print(sys.executable)\"."
+  },
+  {
+    "id": "erro-indentation",
+    "categoria": "Erros comuns",
+    "titulo": "IndentationError",
+    "perguntas": [
+      "Como corrigir IndentationError?",
+      "Erro de indentação em Python",
+      "Expected an indented block"
+    ],
+    "palavras_chave": [
+      "IndentationError",
+      "indentação",
+      "espaços",
+      "bloco"
+    ],
+    "resposta": "Python usa indentação para definir blocos. Mantenha o mesmo padrão, normalmente quatro espaços, dentro de funções, condições e laços. Evite misturar tabs e espaços.",
+    "exemplo": "if ativo:\n    print(\"Ativo\")",
+    "proximo_passo": "Ative a exibição de espaços no editor para localizar diferenças."
+  },
+  {
+    "id": "erro-nameerror",
+    "categoria": "Erros comuns",
+    "titulo": "NameError",
+    "perguntas": [
+      "Como corrigir NameError?",
+      "Name is not defined",
+      "Variável não definida"
+    ],
+    "palavras_chave": [
+      "NameError",
+      "not defined",
+      "variável",
+      "escopo",
+      "nome"
+    ],
+    "resposta": "O `NameError` indica que um nome foi usado antes de existir no escopo atual. Confira erros de digitação, a ordem de execução e onde a variável foi criada.",
+    "exemplo": "nome = \"Ana\"\nprint(nome)",
+    "proximo_passo": "Revise também o conceito de escopo local e global."
+  },
+  {
+    "id": "erro-typeerror",
+    "categoria": "Erros comuns",
+    "titulo": "TypeError",
+    "perguntas": [
+      "Como corrigir TypeError?",
+      "Erro unsupported operand type",
+      "Não consigo somar texto e número"
+    ],
+    "palavras_chave": [
+      "TypeError",
+      "tipo",
+      "conversão",
+      "str",
+      "int"
+    ],
+    "resposta": "O `TypeError` ocorre quando uma operação recebe um tipo incompatível. Verifique os tipos com `type()` e faça uma conversão consciente quando necessário.",
+    "exemplo": "idade = 25\nmensagem = \"Idade: \" + str(idade)",
+    "proximo_passo": "Evite converter sem validar a entrada do usuário."
+  },
+  {
+    "id": "erro-indexerror",
+    "categoria": "Erros comuns",
+    "titulo": "IndexError",
+    "perguntas": [
+      "Como corrigir IndexError?",
+      "List index out of range",
+      "Índice fora da lista"
+    ],
+    "palavras_chave": [
+      "IndexError",
+      "índice",
+      "lista",
+      "range",
+      "len"
+    ],
+    "resposta": "O `IndexError` acontece quando você tenta acessar uma posição que não existe. Lembre-se de que os índices começam em zero e o último índice é `len(lista) - 1`.",
+    "exemplo": "nomes = [\"Ana\", \"João\"]\nprint(nomes[1])",
+    "proximo_passo": "Quando possível, percorra a lista diretamente com for."
+  },
+  {
+    "id": "venv-criar",
+    "categoria": "Ambiente de desenvolvimento",
+    "titulo": "Criando ambiente virtual",
+    "perguntas": [
+      "Como criar um ambiente virtual?",
+      "Como usar venv?",
+      "Como isolar as bibliotecas do projeto?"
+    ],
+    "palavras_chave": [
+      "venv",
+      "ambiente virtual",
+      ".venv",
+      "dependências"
+    ],
+    "resposta": "Um ambiente virtual isola as bibliotecas do projeto. Crie com `python -m venv .venv` e ative antes de instalar as dependências.",
+    "exemplo": "python -m venv .venv\n.\\.venv\\Scripts\\Activate.ps1  # PowerShell",
+    "proximo_passo": "Depois, instale as dependências com python -m pip install -r requirements.txt."
+  },
+  {
+    "id": "pip-requirements",
+    "categoria": "Ambiente de desenvolvimento",
+    "titulo": "Dependências e requirements.txt",
+    "perguntas": [
+      "Como criar requirements.txt?",
+      "Como instalar todas as bibliotecas do projeto?",
+      "Para que serve pip freeze?"
+    ],
+    "palavras_chave": [
+      "requirements",
+      "pip",
+      "dependências",
+      "install",
+      "freeze"
+    ],
+    "resposta": "`requirements.txt` registra as bibliotecas necessárias. Instale com `python -m pip install -r requirements.txt`. Para projetos pequenos, liste apenas as dependências realmente usadas.",
+    "exemplo": "python -m pip install -r requirements.txt",
+    "proximo_passo": "Não envie a pasta .venv para o GitHub."
+  },
+  {
+    "id": "pandas-dataframe",
+    "categoria": "Pandas",
+    "titulo": "DataFrame",
+    "perguntas": [
+      "O que é DataFrame?",
+      "Como funciona pandas DataFrame?",
+      "Como visualizar uma tabela com pandas?"
+    ],
+    "palavras_chave": [
+      "pandas",
+      "DataFrame",
+      "tabela",
+      "dados",
+      "head"
+    ],
+    "resposta": "Um `DataFrame` é uma estrutura tabular do Pandas, formada por linhas e colunas. Ela permite filtrar, transformar, agrupar e analisar dados.",
+    "exemplo": "import pandas as pd\n\ndf = pd.read_csv(\"dados.csv\")\nprint(df.head())",
+    "proximo_passo": "Estude info(), describe(), loc e iloc."
+  },
+  {
+    "id": "pandas-readcsv",
+    "categoria": "Pandas",
+    "titulo": "Leitura de CSV",
+    "perguntas": [
+      "Como ler CSV com pandas?",
+      "Para que serve read_csv?",
+      "Como abrir uma planilha CSV?"
+    ],
+    "palavras_chave": [
+      "read_csv",
+      "CSV",
+      "pandas",
+      "encoding",
+      "sep"
+    ],
+    "resposta": "Use `pd.read_csv()` para carregar um CSV. Dependendo do arquivo, pode ser necessário informar `sep=';'` ou o encoding.",
+    "exemplo": "df = pd.read_csv(\"vendas.csv\", sep=\";\", encoding=\"utf-8\")",
+    "proximo_passo": "Confira df.info() e df.head() antes de iniciar a análise."
+  },
+  {
+    "id": "pandas-nulos",
+    "categoria": "Pandas",
+    "titulo": "Valores ausentes",
+    "perguntas": [
+      "Como encontrar valores nulos?",
+      "Como preencher NaN no pandas?",
+      "Como remover dados ausentes?"
+    ],
+    "palavras_chave": [
+      "nulo",
+      "NaN",
+      "isna",
+      "fillna",
+      "dropna"
+    ],
+    "resposta": "Use `isna().sum()` para contar ausências. `fillna()` preenche e `dropna()` remove. A escolha depende do significado dos dados; não remova linhas automaticamente sem analisar.",
+    "exemplo": "print(df.isna().sum())\ndf[\"idade\"] = df[\"idade\"].fillna(df[\"idade\"].median())",
+    "proximo_passo": "Registre no projeto por que cada estratégia de tratamento foi escolhida."
+  },
+  {
+    "id": "pandas-filtros",
+    "categoria": "Pandas",
+    "titulo": "Filtros em DataFrames",
+    "perguntas": [
+      "Como filtrar dados no pandas?",
+      "Como selecionar linhas por condição?",
+      "Como usar loc?"
+    ],
+    "palavras_chave": [
+      "filtro",
+      "loc",
+      "condição",
+      "DataFrame",
+      "seleção"
+    ],
+    "resposta": "Crie uma condição booleana e use-a entre colchetes ou com `.loc`. Combine condições usando `&` para E e `|` para OU, sempre com parênteses.",
+    "exemplo": "clientes_ativos = df.loc[(df[\"ativo\"] == True) & (df[\"idade\"] >= 18)]",
+    "proximo_passo": "Pratique seleção de colunas junto com o filtro."
+  },
+  {
+    "id": "pandas-groupby",
+    "categoria": "Pandas",
+    "titulo": "Agrupamentos com groupby",
+    "perguntas": [
+      "Como agrupar dados no pandas?",
+      "Como somar vendas por categoria?",
+      "Para que serve groupby?"
+    ],
+    "palavras_chave": [
+      "groupby",
+      "agrupar",
+      "sum",
+      "mean",
+      "categoria"
+    ],
+    "resposta": "`groupby()` reúne linhas por uma ou mais categorias e permite calcular soma, média, contagem e outras estatísticas.",
+    "exemplo": "resumo = df.groupby(\"categoria\")[\"valor\"].sum().reset_index()",
+    "proximo_passo": "Estude agg() para gerar várias métricas no mesmo agrupamento."
+  },
+  {
+    "id": "pandas-duplicados",
+    "categoria": "Pandas",
+    "titulo": "Dados duplicados",
+    "perguntas": [
+      "Como encontrar linhas duplicadas?",
+      "Como remover duplicados no pandas?",
+      "Para que serve drop_duplicates?"
+    ],
+    "palavras_chave": [
+      "duplicado",
+      "duplicated",
+      "drop_duplicates",
+      "pandas"
+    ],
+    "resposta": "`duplicated()` identifica repetições e `drop_duplicates()` remove duplicidades. Antes de excluir, verifique se os registros são realmente indevidos.",
+    "exemplo": "print(df.duplicated().sum())\ndf = df.drop_duplicates().copy()",
+    "proximo_passo": "Quando necessário, use subset para escolher as colunas que definem uma duplicidade."
+  },
+  {
+    "id": "automacao-csv",
+    "categoria": "Automação",
+    "titulo": "Automação de relatórios CSV",
+    "perguntas": [
+      "Como automatizar um relatório CSV?",
+      "Como processar arquivos de uma pasta?",
+      "Como gerar relatório com pandas?"
+    ],
+    "palavras_chave": [
+      "automação",
+      "relatório",
+      "CSV",
+      "pasta",
+      "pandas"
+    ],
+    "resposta": "Uma automação pode localizar arquivos, carregar os dados, aplicar regras, gerar um resumo e salvar o resultado. Separe cada etapa em uma função e registre erros.",
+    "exemplo": "from pathlib import Path\nimport pandas as pd\n\nfor arquivo in Path(\"entrada\").glob(\"*.csv\"):\n    df = pd.read_csv(arquivo)\n    df.describe().to_csv(Path(\"saida\") / f\"resumo_{arquivo.name}\")",
+    "proximo_passo": "Inclua logs e valide as colunas antes do processamento."
+  },
+  {
+    "id": "automacao-agendamento",
+    "categoria": "Automação",
+    "titulo": "Execução agendada",
+    "perguntas": [
+      "Como executar um script automaticamente?",
+      "Como agendar um programa Python?",
+      "Como rodar uma automação todo dia?"
+    ],
+    "palavras_chave": [
+      "agendar",
+      "automação",
+      "Task Scheduler",
+      "cron",
+      "script"
+    ],
+    "resposta": "No Windows, use o Agendador de Tarefas para chamar o Python do ambiente virtual e o script. No Linux, uma alternativa comum é o cron. Teste o comando manualmente antes de agendar.",
+    "exemplo": "C:\\projeto\\.venv\\Scripts\\python.exe C:\\projeto\\src\\rotina.py",
+    "proximo_passo": "Configure logs em arquivo para acompanhar execuções sem interface."
+  },
+  {
+    "id": "git-basico",
+    "categoria": "Git e GitHub",
+    "titulo": "Fluxo básico do Git",
+    "perguntas": [
+      "Como subir um projeto no GitHub?",
+      "Quais comandos básicos do git?",
+      "Como fazer commit e push?"
+    ],
+    "palavras_chave": [
+      "git",
+      "github",
+      "commit",
+      "push",
+      "repositório"
+    ],
+    "resposta": "O fluxo básico é iniciar o repositório, selecionar arquivos, criar um commit, configurar o repositório remoto e enviar a branch.",
+    "exemplo": "git init\ngit add .\ngit commit -m \"Primeira versão\"\ngit branch -M main\ngit remote add origin URL_DO_REPOSITORIO\ngit push -u origin main",
+    "proximo_passo": "Crie um README e um .gitignore antes do primeiro push."
+  },
+  {
+    "id": "git-ignore",
+    "categoria": "Git e GitHub",
+    "titulo": ".gitignore",
+    "perguntas": [
+      "O que colocar no gitignore?",
+      "Como não enviar .venv para o GitHub?",
+      "Como proteger o arquivo .env?"
+    ],
+    "palavras_chave": [
+      ".gitignore",
+      ".venv",
+      ".env",
+      "segredo",
+      "cache"
+    ],
+    "resposta": "O `.gitignore` define arquivos que o Git não deve versionar. Em Python, ignore o ambiente virtual, caches, variáveis secretas e saídas geradas.",
+    "exemplo": ".venv/\n__pycache__/\n.env\n*.pyc\noutputs/",
+    "proximo_passo": "Se um segredo já foi enviado, remova-o do histórico e troque a chave."
+  },
+  {
+    "id": "ia-alucinacao",
+    "categoria": "Inteligência Artificial",
+    "titulo": "Alucinação em IA",
+    "perguntas": [
+      "O que é alucinação em IA?",
+      "Como evitar respostas inventadas?",
+      "Como tornar um assistente mais confiável?"
+    ],
+    "palavras_chave": [
+      "alucinação",
+      "IA",
+      "confiabilidade",
+      "fonte",
+      "RAG"
+    ],
+    "resposta": "Alucinação é uma resposta apresentada como correta sem apoio suficiente. Para reduzir o risco, limite o escopo, forneça contexto confiável, mostre fontes, use baixa temperatura e permita que o assistente diga que não sabe.",
+    "exemplo": "Quando a base não tiver informação suficiente: \"Não encontrei essa resposta na base atual.\"",
+    "proximo_passo": "Crie testes com perguntas dentro e fora do escopo."
+  },
+  {
+    "id": "ia-rag",
+    "categoria": "Inteligência Artificial",
+    "titulo": "RAG e base de conhecimento",
+    "perguntas": [
+      "O que é RAG?",
+      "Como conectar uma IA a uma base de conhecimento?",
+      "Como o NexoPy encontra respostas?"
+    ],
+    "palavras_chave": [
+      "RAG",
+      "recuperação",
+      "base de conhecimento",
+      "contexto",
+      "similaridade"
+    ],
+    "resposta": "RAG combina recuperação de informações com geração de respostas. Primeiro, o sistema busca trechos relevantes na base; depois, esses trechos são usados como contexto para a IA.",
+    "exemplo": "pergunta -> busca por similaridade -> contexto recuperado -> resposta",
+    "proximo_passo": "Avalie separadamente a qualidade da busca e a qualidade da resposta."
+  },
+  {
+    "id": "trilha-iniciante",
+    "categoria": "Trilha de estudos",
+    "titulo": "Próximos passos para iniciantes",
+    "perguntas": [
+      "O que estudar primeiro em Python?",
+      "Qual a ordem para aprender Python?",
+      "Sou iniciante, por onde começo?"
+    ],
+    "palavras_chave": [
+      "trilha",
+      "iniciante",
+      "ordem",
+      "estudar",
+      "Python"
+    ],
+    "resposta": "Uma sequência prática é: lógica de programação, variáveis e tipos, operadores, condições, laços, coleções, funções, arquivos, exceções, módulos, Git e um projeto pequeno.",
+    "exemplo": "Projeto sugerido: organizador de arquivos ou analisador simples de CSV.",
+    "proximo_passo": "Escolha um projeto curto e aplique um conceito de cada etapa."
+  },
+  {
+    "id": "exercicio-funcoes",
+    "categoria": "Exercícios",
+    "titulo": "Exercício sobre funções",
+    "perguntas": [
+      "Crie um exercício de funções",
+      "Quero praticar def e return",
+      "Me passe um exercício de função"
+    ],
+    "palavras_chave": [
+      "exercício",
+      "função",
+      "def",
+      "return",
+      "praticar"
+    ],
+    "resposta": "Crie uma função chamada `calcular_media` que receba três notas e retorne a média. Depois, use outra condição para informar se a pessoa foi aprovada com média maior ou igual a 7.",
+    "exemplo": "Dica: def calcular_media(nota1, nota2, nota3):",
+    "proximo_passo": "Tente resolver antes de pedir uma solução completa."
+  },
+  {
+    "id": "exercicio-pandas",
+    "categoria": "Exercícios",
+    "titulo": "Exercício sobre Pandas",
+    "perguntas": [
+      "Crie um exercício de pandas",
+      "Quero praticar DataFrame",
+      "Me passe uma atividade de análise de dados"
+    ],
+    "palavras_chave": [
+      "exercício",
+      "pandas",
+      "DataFrame",
+      "CSV",
+      "análise"
+    ],
+    "resposta": "Crie um CSV com produto, categoria, quantidade e preço. Depois: carregue com Pandas, crie uma coluna de total, encontre valores ausentes, calcule o faturamento por categoria e exporte um resumo.",
+    "exemplo": "df[\"total\"] = df[\"quantidade\"] * df[\"preco\"]",
+    "proximo_passo": "Documente as conclusões obtidas com os dados."
+  }
+]
