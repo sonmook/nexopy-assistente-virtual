@@ -159,3 +159,17 @@ O diagnóstico conhecido de 18 perguntas passou a 15/18, com três falhas de
 paráfrase ainda abertas. A linha de base original de 9/18 foi preservada no
 [relatório](06-diagnostico-independente.md). Não se alteraram os casos nem o limiar
 global de busca para obter essa melhoria.
+
+
+## Expansão de vocabulário na recuperação
+
+`src/nexopy/query.py` adiciona termos de busca para conceitos compostos, como
+registrar bibliotecas, tratar valores ausentes e calcular agregações por grupo.
+O corpus e os dois conjuntos anteriores de casos não foram alterados. O limiar
+padrão continua em 0,16; a similaridade é calculada para a consulta expandida,
+não representa probabilidade de acerto e pode introduzir falsos positivos.
+
+Após essa mudança, a regressão segue em 38/38 e o diagnóstico conhecido v1 em
+18/18. O novo [diagnóstico v2](08-diagnostico-v2.md), reservado antes da alteração,
+obteve 10/12. Falhas de v2 não foram usadas para ajustar esta versão; o CI publica
+os seus resultados separadamente, sem limiar de aprovação.

@@ -8,6 +8,8 @@ from typing import Any
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
+from .query import expand_query
+
 
 STOP_WORDS_PT = {
     "a", "ao", "aos", "aquela", "aquele", "aquilo", "as", "ate", "com",
@@ -107,10 +109,8 @@ class KnowledgeBase:
         if not question:
             return []
 
-        # Expansão explícita de vocabulário, sem reduzir o limiar global.
-        if "registros repetidos" in question.casefold():
-            question += " linhas duplicadas"
-        query_vector = self.vectorizer.transform([question])
+        # O limiar e os scores continuam os do TF-IDF; apenas o vocabulário muda.
+        query_vector = self.vectorizer.transform([expand_query(question)])
         scores = cosine_similarity(query_vector, self.matrix).flatten()
         indexes = scores.argsort()[::-1][:max(1, top_k)]
 

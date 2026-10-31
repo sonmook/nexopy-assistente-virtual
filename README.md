@@ -135,7 +135,7 @@ python scripts/evaluate.py
 ruff check --isolated --select E9,F .
 ```
 
-A validação local mais recente passou com **93 testes** e **38/38 casos conformes**.
+A validação local mais recente passou com **106 testes** e **38/38 casos conformes**.
 A avaliação roda no modo local, sem chamadas externas:
 
 | Grupo | Casos conformes |
@@ -166,8 +166,9 @@ limitações em [Avaliação e métricas](docs/04-metricas.md).
 
 Um segundo conjunto sintético, escrito separadamente dos casos usados nos ajustes,
 obteve **9/18 casos conformes (50%)** na primeira medição. Após corrigir os achados
-da auditoria, o resultado passou a **15/18 (83,33%)**: ambiguidades, continuações,
-pedidos externos e desvios testados passaram; três paráfrases ainda falham na busca.
+da auditoria e expandir o vocabulário da busca, o resultado passou primeiro a
+15/18 e depois a **18/18 (100%)**. As três falhas conhecidas de paráfrase foram
+corrigidas sem reduzir o limiar de similaridade.
 Como esses casos já orientaram correções, agora são uma referência conhecida,
 e uma nova medição independente exigirá outro conjunto de perguntas.
 
@@ -177,7 +178,16 @@ python scripts/evaluate.py --cases tests/casos_independentes_v1.json --output-di
 
 O CI disponibiliza esse diagnóstico como artefato separado, sem aplicar os limiares
 de aprovação da regressão. Consulte as falhas e a metodologia no
-[diagnóstico independente](docs/06-diagnostico-independente.md).
+[diagnóstico v1](docs/06-diagnostico-independente.md).
+
+Um novo conjunto de 12 casos foi reservado antes da alteração de busca e obteve
+**10/12 (83,33%)**. As duas falhas foram preservadas, sem novos ajustes a esses
+casos nesta entrega. A metodologia e os erros estão no
+[diagnóstico v2](docs/08-diagnostico-v2.md).
+
+```bash
+python scripts/evaluate.py --cases tests/casos_independentes_v2.json --output-dir outputs/independente-v2 --report-only
+```
 
 ## Feedback das respostas
 

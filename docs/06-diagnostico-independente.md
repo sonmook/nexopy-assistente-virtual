@@ -67,3 +67,16 @@ A primeira medição acima permanece como registro histórico. O conjunto não f
 editado; agora suas falhas conhecidas também orientaram as correções de intenção
 e conversação da auditoria. Por isso, a nova pontuação é uma medida de regressão
 sobre casos conhecidos, não nova evidência independente de generalização.
+
+
+## Após melhoria de vocabulário da busca
+
+O resultado atual passou de 15/18 para **18/18 (100%)**. A busca expande consultas
+por conceitos: registro de bibliotecas/dependências, campos/valores ausentes e
+agregação por categoria em contexto de dados. A expansão não seleciona IDs de
+fontes diretamente e não altera o limiar global. Os três erros de paráfrase acima
+estão cobertos por regressões automatizadas, com variações e controles negativos.
+
+Esse conjunto v1 agora é conhecido e foi usado no ajuste. Para verificar perguntas
+novas, foi reservado um [conjunto v2](08-diagnostico-v2.md) antes da alteração da
+busca; os resultados de v2 são informativos e não foram usados para reajustá-la.

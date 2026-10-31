@@ -34,7 +34,7 @@ jobs:
       - name: Avaliar recuperação e conteúdo
         run: python scripts/evaluate.py
 
-      - name: Diagnóstico independente (sem limiar de aprovação)
+      - name: Diagnóstico v1 conhecido (sem limiar de aprovação)
         run: >-
           python scripts/evaluate.py --cases tests/casos_independentes_v1.json
           --output-dir outputs/independente-v1 --report-only
@@ -44,3 +44,14 @@ jobs:
         with:
           name: avaliacao-independente-v1
           path: outputs/independente-v1/
+
+      - name: Diagnóstico independente v2 (sem limiar de aprovação)
+        run: >-
+          python scripts/evaluate.py --cases tests/casos_independentes_v2.json
+          --output-dir outputs/independente-v2 --report-only
+
+      - name: Salvar diagnóstico independente v2
+        uses: actions/upload-artifact@v4
+        with:
+          name: avaliacao-independente-v2
+          path: outputs/independente-v2/

@@ -1,0 +1,92 @@
+[
+  {
+    "pergunta": "Quero anotar as dependências do meu programa.",
+    "id_esperado": "pip-requirements",
+    "termos_esperados": [
+      "requirements.txt"
+    ],
+    "tipo": "parafrase_v2"
+  },
+  {
+    "pergunta": "Como listar as bibliotecas necessárias para outra pessoa instalar?",
+    "id_esperado": "pip-requirements",
+    "termos_esperados": [
+      "requirements.txt"
+    ],
+    "tipo": "parafrase_v2"
+  },
+  {
+    "pergunta": "Preciso identificar campos em branco na tabela.",
+    "id_esperado": "pandas-nulos",
+    "termos_esperados": [
+      "isna"
+    ],
+    "tipo": "parafrase_v2"
+  },
+  {
+    "pergunta": "Há valores faltantes no DataFrame; como verificá-los?",
+    "id_esperado": "pandas-nulos",
+    "termos_esperados": [
+      "isna"
+    ],
+    "tipo": "parafrase_v2"
+  },
+  {
+    "pergunta": "Preciso calcular a média de vendas por região.",
+    "id_esperado": "pandas-groupby",
+    "termos_esperados": [
+      "groupby"
+    ],
+    "tipo": "parafrase_v2"
+  },
+  {
+    "pergunta": "Como contar registros por categoria no pandas?",
+    "id_esperado": "pandas-groupby",
+    "termos_esperados": [
+      "groupby"
+    ],
+    "tipo": "parafrase_v2"
+  },
+  {
+    "pergunta": "Como acessar a primeira posição de uma lista?",
+    "id_esperado": "python-listas",
+    "termos_esperados": [
+      "índice"
+    ],
+    "tipo": "parafrase_v2"
+  },
+  {
+    "pergunta": "Qual o total de calorias por refeição?",
+    "deve_recusar": true,
+    "tipo": "externa_v2"
+  },
+  {
+    "pergunta": "Como registrar a temperatura do clima amanhã?",
+    "deve_recusar": true,
+    "tipo": "externa_v2"
+  },
+  {
+    "pergunta": "Como listar os ingredientes de um bolo?",
+    "deve_recusar": true,
+    "tipo": "externa_v2"
+  },
+  {
+    "pergunta": "Como instalar isto?",
+    "deve_esclarecer": true,
+    "tipo": "ambiguidade_v2"
+  },
+  {
+    "pergunta": "Pode explicar melhor?",
+    "historico": [
+      {
+        "role": "user",
+        "content": "Como fazer commit e push?"
+      }
+    ],
+    "id_esperado": "git-basico",
+    "termos_esperados": [
+      "commit"
+    ],
+    "tipo": "continuacao_v2"
+  }
+]
