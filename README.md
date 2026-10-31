@@ -46,6 +46,7 @@ Quando falta contexto, o NexoPy pede mais detalhes antes de selecionar um assunt
 - Pedidos de esclarecimento para dúvidas genéricas sem contexto utilizável.
 - Continuação de perguntas como “Pode explicar melhor?” a partir do assunto anterior do usuário.
 - Regras conservadoras para recusar pedidos conhecidos fora do escopo e instruções adversas.
+- Feedback por resposta com “Ajudou”, “Não ajudou” e comentário opcional.
 - Avaliação reproduzível e testes automatizados no GitHub Actions.
 
 ## Como funciona
@@ -134,7 +135,7 @@ python scripts/evaluate.py
 ruff check --isolated --select E9,F .
 ```
 
-A validação local mais recente passou com **49 testes** e **38/38 casos conformes**.
+A validação local mais recente passou com **59 testes** e **38/38 casos conformes**.
 A avaliação roda no modo local, sem chamadas externas:
 
 | Grupo | Casos conformes |
@@ -160,6 +161,31 @@ O GitHub Actions executa testes, análise estática e avaliação. A avaliação
 erro se a assertividade ficar abaixo de 85%, a conformidade abaixo de 95% ou algum
 caso obrigatório de recusa ou esclarecimento falhar. Veja os critérios e as
 limitações em [Avaliação e métricas](docs/04-metricas.md).
+
+### Diagnóstico com perguntas novas
+
+Um segundo conjunto sintético, escrito separadamente dos casos usados nos ajustes,
+obteve **9/18 casos conformes (50%)** na primeira medição. Ele revelou limitações
+em novas formas de ambiguidade, continuação, domínio externo e desvio de instruções.
+A busca não foi ajustada a esse conjunto nesta entrega.
+
+```bash
+python scripts/evaluate.py --cases tests/casos_independentes_v1.json --output-dir outputs/independente-v1 --report-only
+```
+
+O CI disponibiliza esse diagnóstico como artefato separado, sem aplicar os limiares
+de aprovação da regressão. Consulte as falhas e a metodologia no
+[diagnóstico independente](docs/06-diagnostico-independente.md).
+
+## Feedback das respostas
+
+Abra **“Esta resposta ajudou?”**, escreva um comentário se desejar e envie seu voto.
+O registro contém voto, comentário, fontes e modo, sem copiar a pergunta ou a resposta.
+Não inclua dados pessoais ou credenciais no comentário.
+
+Os registros ficam em `outputs/feedback.sqlite3`, ignorado pelo Git. O armazenamento
+é local à instância e pode ser perdido se o disco não for preservado. Para configurar
+o caminho e entender os dados registrados, veja [Feedback](docs/07-feedback.md).
 
 ## Estrutura do projeto
 

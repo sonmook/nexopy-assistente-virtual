@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import sqlite3
 import sys
+from uuid import uuid4
 from pathlib import Path
 
 import streamlit as st
@@ -12,6 +14,7 @@ if str(SRC) not in sys.path:
 
 from nexopy.assistant import NexoPyAssistant
 from nexopy.config import Settings
+from nexopy.feedback import MAX_COMMENT_LENGTH, save_feedback
 
 
 st.set_page_config(
@@ -61,6 +64,39 @@ st.markdown(
 @st.cache_resource
 def load_assistant() -> NexoPyAssistant:
     return NexoPyAssistant(Settings())
+
+
+def render_feedback(message: dict) -> None:
+    if message.get("feedback_saved"):
+        st.caption("Obrigado! Sua avaliação foi registrada.")
+        return
+    message_id = message.setdefault("id", str(uuid4()))
+    with st.expander("Esta resposta ajudou?"):
+        st.caption(
+            "Ao avaliar, você envia seu voto, comentário opcional, fontes e modo da resposta. "
+            "O texto da conversa não é salvo no feedback. Não inclua dados pessoais ou chaves."
+        )
+        with st.form(f"feedback-{message_id}"):
+            comment = st.text_area("Comentário opcional", max_chars=MAX_COMMENT_LENGTH)
+            left, right = st.columns(2)
+            helpful = left.form_submit_button("👍 Ajudou")
+            unhelpful = right.form_submit_button("👎 Não ajudou")
+        if helpful or unhelpful:
+            try:
+                save_feedback(
+                    assistant.settings.feedback_path,
+                    message_id=message_id,
+                    rating="helpful" if helpful else "unhelpful",
+                    comment=comment,
+                    source_ids=[source["id"] for source in message.get("sources", [])],
+                    mode=message.get("mode", "Base local"),
+                    action=message.get("action", "answer"),
+                )
+            except (OSError, sqlite3.Error, ValueError):
+                st.error("Não foi possível registrar a avaliação. Tente novamente.")
+            else:
+                message["feedback_saved"] = True
+                st.rerun()
 
 
 assistant = load_assistant()
@@ -158,6 +194,9 @@ for message in st.session_state.messages:
                         unsafe_allow_html=True
                     )
 
+        if message["role"] == "assistant":
+            render_feedback(message)
+
 typed_prompt = st.chat_input(
     "Digite sua dúvida sobre Python, Pandas, automação ou IA..."
 )
@@ -210,7 +249,9 @@ if prompt:
         "content": response.text,
         "sources": response.sources,
         "warning": response.warning,
-        "mode": response.mode
+        "mode": response.mode,
+        "action": response.action,
+        "id": str(uuid4())
     })
 
     st.rerun()

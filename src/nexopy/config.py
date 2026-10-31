@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -23,6 +23,9 @@ class Settings:
     knowledge_path: Path = ROOT_DIR / "data" / "conhecimentos.json"
     evaluation_path: Path = ROOT_DIR / "tests" / "casos_avaliacao.json"
     outputs_dir: Path = ROOT_DIR / "outputs"
+    feedback_path: Path = field(default_factory=lambda: Path(
+        os.getenv("NEXOPY_FEEDBACK_PATH", str(ROOT_DIR / "outputs" / "feedback.sqlite3"))
+    ))
     min_similarity: float = float(os.getenv("MIN_SIMILARITY", "0.16"))
     top_k: int = int(os.getenv("TOP_K", "3"))
     use_gemini: bool = _as_bool(os.getenv("USE_GEMINI"), default=False)

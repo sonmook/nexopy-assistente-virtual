@@ -127,3 +127,20 @@ para intenções conhecidas. Não constituem um classificador semântico complet
 uma defesa geral contra prompt injection. Os 38 casos foram usados para orientar
 os ajustes e são testes de regressão, não uma amostra independente de qualidade.
 O modo generativo precisa ser avaliado separadamente com revisão humana.
+
+
+## Diagnóstico separado e feedback
+
+O conjunto `tests/casos_independentes_v1.json` foi escrito antes da primeira execução
+para avaliar perguntas diferentes das usadas no ajuste. A medição inicial teve
+9/18 casos conformes (50%), sem ajustes posteriores da busca para elevar o resultado.
+A metodologia, os limites e as nove falhas estão no
+[diagnóstico independente](06-diagnostico-independente.md).
+
+Use `--cases`, `--output-dir` e `--report-only` no script de avaliação para executar
+e salvar esse diagnóstico separadamente. O CI mantém os critérios da regressão e
+publica os resultados independentes como artefato informativo. A aprovação do CI
+não significa aprovação desse segundo conjunto.
+
+O [feedback voluntário](07-feedback.md) complementa os casos sintéticos; ainda não
+há análise automática desses registros nem evidência de avaliações de usuários reais.

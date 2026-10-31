@@ -13,3 +13,8 @@ outputs/*.json
 Thumbs.db
 .vscode/
 .idea/
+
+# Avaliações locais e feedback (podem conter comentários privados)
+outputs/**/*.json
+outputs/**/*.csv
+outputs/*.sqlite3*
