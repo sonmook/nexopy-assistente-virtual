@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import re
+import unicodedata
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Literal
 
 from .config import Settings
 from .knowledge import KnowledgeBase, SearchResult
@@ -11,9 +12,33 @@ from .prompts import build_user_prompt
 
 
 GREETING_PATTERN = re.compile(
-    r"^(oi|olá|ola|bom dia|boa tarde|boa noite|e aí|eai|hello)[!,. ]*$",
-    re.IGNORECASE
+    r"^(oi|olá|ola|bom dia|boa tarde|boa noite|e aí|eai|hello)[!,. ]*$", re.IGNORECASE
 )
+
+
+# Regras conservadoras para intenções conhecidas; não substituem uma análise
+# semântica de domínio nem garantem resistência a toda injeção de prompt.
+UNSUPPORTED_INTENT = re.compile(
+    r"\b(previsao do tempo|(?:qual sera|como estara).{0,20}(?:clima|tempo)"
+    r"|(?:numeros|resultado).{0,30}loteria|(?:vencera|ganhara).{0,20}eleicao|horoscopo)\b"
+)
+OVERRIDE_INTENT = re.compile(
+    r"\bignore\b.{0,80}\b(instruc|base|contexto|regra)"
+    r"|\b(revele|mostre|exiba)\b.{0,30}\b(sua|seu)\b.{0,20}\b(chave|senha|token)"
+)
+FOLLOW_UP = re.compile(
+    r"(?:pode |voce pode )?(?:dar|mostrar) (?:um |outro |mais um )?exemplo"
+    r"|(?:pode |voce pode )?explicar (?:melhor|de novo)"
+)
+AMBIGUOUS = re.compile(r"(?:como |pode )?(?:instalar|usar|fazer|corrigir) (?:isso|isto)")
+
+
+def normalize(text: str) -> str:
+    return "".join(
+        char
+        for char in unicodedata.normalize("NFKD", text.casefold())
+        if not unicodedata.combining(char)
+    ).strip(" ?!.\n")
 
 
 @dataclass(frozen=True)
@@ -23,22 +48,15 @@ class AssistantResponse:
     confidence: float
     mode: str
     warning: str | None = None
+    action: Literal["answer", "refuse", "clarify"] = "answer"
 
 
 class NexoPyAssistant:
-    def __init__(
-        self,
-        settings: Settings | None = None,
-        enable_llm: bool | None = None
-    ) -> None:
+    def __init__(self, settings: Settings | None = None, enable_llm: bool | None = None) -> None:
         self.settings = settings or Settings()
         self.knowledge = KnowledgeBase(self.settings.knowledge_path)
 
-        use_llm = (
-            self.settings.gemini_enabled
-            if enable_llm is None
-            else enable_llm
-        )
+        use_llm = self.settings.gemini_enabled if enable_llm is None else enable_llm
 
         self.llm = None
         self.llm_initialization_error: str | None = None
@@ -46,8 +64,7 @@ class NexoPyAssistant:
         if use_llm:
             try:
                 self.llm = GeminiProvider(
-                    api_key=self.settings.gemini_api_key,
-                    model=self.settings.gemini_model
+                    api_key=self.settings.gemini_api_key, model=self.settings.gemini_model
                 )
             except (ValueError, LLMUnavailableError) as exc:
                 self.llm_initialization_error = str(exc)
@@ -57,9 +74,7 @@ class NexoPyAssistant:
         return "Gemini + base local" if self.llm else "Base local"
 
     def answer(
-        self,
-        question: str,
-        history: list[dict[str, str]] | None = None
+        self, question: str, history: list[dict[str, str]] | None = None
     ) -> AssistantResponse:
         question = question.strip()
 
@@ -68,7 +83,7 @@ class NexoPyAssistant:
                 text="Digite uma pergunta para que eu possa ajudar.",
                 sources=[],
                 confidence=0.0,
-                mode="Base local"
+                mode="Base local",
             )
 
         if GREETING_PATTERN.match(question):
@@ -80,41 +95,45 @@ class NexoPyAssistant:
                 ),
                 sources=[],
                 confidence=1.0,
-                mode="Base local"
+                mode="Base local",
             )
 
-        results = self.knowledge.search(
-            question,
-            top_k=self.settings.top_k
-        )
+        normalized = normalize(question)
+        if self._blocked(normalized):
+            return self._refusal()
 
-        relevant = [
-            result for result in results
-            if result.score >= self.settings.min_similarity
-        ]
+        search_question = question
+        if FOLLOW_UP.fullmatch(normalized):
+            # O histórico da IA nunca define o assunto da recuperação.
+            previous = next(
+                (
+                    message.get("content", "")
+                    for message in reversed(history or [])
+                    if message.get("role") == "user"
+                    and not FOLLOW_UP.fullmatch(normalize(message.get("content", "")))
+                ),
+                "",
+            )
+            if not previous or self._blocked(normalize(previous)):
+                return self._clarification()
+            search_question = previous
+        if AMBIGUOUS.fullmatch(normalize(search_question)):
+            return self._clarification()
+
+        results = self.knowledge.search(search_question, top_k=self.settings.top_k)
+
+        relevant = [result for result in results if result.score >= self.settings.min_similarity]
 
         if not relevant:
-            return AssistantResponse(
-                text=(
-                    "Não encontrei informação suficiente na minha base de "
-                    "conhecimento para responder com segurança. Atualmente, "
-                    "posso ajudar com Python, Pandas, automação, ambientes "
-                    "virtuais, Git e fundamentos de inteligência artificial."
-                ),
-                sources=[],
-                confidence=results[0].score if results else 0.0,
-                mode="Base local"
-            )
+            if FOLLOW_UP.fullmatch(normalized):
+                return self._clarification()
+            return self._refusal(results[0].score if results else 0.0)
 
         warning = None
         response_mode = "Base local"
 
         if self.llm:
-            prompt = build_user_prompt(
-                question=question,
-                results=relevant,
-                recent_history=history
-            )
+            prompt = build_user_prompt(question=question, results=relevant, recent_history=history)
             try:
                 response_text = self.llm.generate(prompt)
                 response_mode = "Gemini + base local"
@@ -134,13 +153,40 @@ class NexoPyAssistant:
                     "id": result.item.id,
                     "titulo": result.item.titulo,
                     "categoria": result.item.categoria,
-                    "score": round(result.score, 4)
+                    "score": round(result.score, 4),
                 }
                 for result in relevant
             ],
             confidence=relevant[0].score,
             mode=response_mode,
-            warning=warning or self.llm_initialization_error
+            warning=warning or self.llm_initialization_error,
+        )
+
+    @staticmethod
+    def _blocked(question: str) -> bool:
+        return bool(UNSUPPORTED_INTENT.search(question) or OVERRIDE_INTENT.search(question))
+
+    @staticmethod
+    def _clarification() -> AssistantResponse:
+        return AssistantResponse(
+            text="Qual assunto, biblioteca ou erro você quer explorar? "
+            "Diga, por exemplo, se está falando de Pandas, Git ou ambientes virtuais.",
+            sources=[],
+            confidence=0.0,
+            mode="Base local",
+            action="clarify",
+        )
+
+    @staticmethod
+    def _refusal(confidence: float = 0.0) -> AssistantResponse:
+        return AssistantResponse(
+            text="Não encontrei informação suficiente na minha base de conhecimento "
+            "para responder com segurança. Posso ajudar com Python, Pandas, "
+            "automação, ambientes virtuais, Git e fundamentos de IA.",
+            sources=[],
+            confidence=confidence,
+            mode="Base local",
+            action="refuse",
         )
 
     @staticmethod

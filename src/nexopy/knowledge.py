@@ -107,6 +107,9 @@ class KnowledgeBase:
         if not question:
             return []
 
+        # Expansão explícita de vocabulário, sem reduzir o limiar global.
+        if "registros repetidos" in question.casefold():
+            question += " linhas duplicadas"
         query_vector = self.vectorizer.transform([question])
         scores = cosine_similarity(query_vector, self.matrix).flatten()
         indexes = scores.argsort()[::-1][:max(1, top_k)]

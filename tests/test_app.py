@@ -15,3 +15,13 @@ def test_local_chat_returns_answer_and_source(monkeypatch):
     assert response["sources"][0]["id"] == "pandas-dataframe"
     assert "colunas" in response["content"]
     assert response["mode"] == "Base local"
+
+    app.chat_input[0].set_value("Pode dar outro exemplo?").run()
+    assert not app.exception
+    assert app.session_state["messages"][-1]["sources"][0]["id"] == "pandas-dataframe"
+    app.button[0].click().run()
+    app.chat_input[0].set_value("Pode explicar melhor?").run()
+    assert not app.exception
+    clarification = app.session_state["messages"][-1]
+    assert not clarification["sources"]
+    assert "Qual assunto" in clarification["content"]

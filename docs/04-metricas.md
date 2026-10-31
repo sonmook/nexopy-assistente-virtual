@@ -21,8 +21,11 @@ O arquivo `tests/casos_avaliacao.json` contém perguntas sobre:
 
 ### Assertividade de recuperação
 
-Percentual de perguntas em que a primeira fonte recuperada corresponde ao item
-esperado.
+Percentual de decisões corretas: nas respostas, a primeira fonte deve ser a
+esperada; nas recusas, a ação deve ser `refuse` e não haver fontes; nos pedidos de
+esclarecimento, a ação deve ser `clarify` e não haver fontes. Os nomes dos campos
+JSON `acertos_recuperacao` e `assertividade_percentual` são mantidos por
+compatibilidade, mas agora incluem essas três decisões.
 
 ### Taxa de respostas seguras
 
@@ -31,7 +34,8 @@ Indicador automático de conformidade dos casos, com critérios diferentes:
 - Respostas: a primeira fonte deve ser a esperada, todas as fontes devem existir
   na base e o texto deve conter todos os `termos_esperados` do caso, ignorando
   maiúsculas e minúsculas.
-- Recusas: não devem apresentar fontes e devem começar com “Não encontrei”.
+- Recusas: ação `refuse`, sem fontes e texto começando com “Não encontrei”.
+- Esclarecimentos: ação `clarify`, sem fontes e texto não vazio.
 
 A presença de termos não comprova correção semântica, ausência de alucinações ou
 segurança geral. Esta métrica serve para regressão do conjunto documentado.
@@ -100,3 +104,26 @@ A integração lê `Interaction.output_text`, calculado pelo SDK a partir dos
 formato, além de respostas vazias, incompletas e falhas. Apenas interações com
 status `completed` são apresentadas como respostas generativas. A chamada tem
 um limite de 45 segundos; erros acionam a base local.
+
+
+## Conjunto ampliado: 38 casos
+
+Foram preservados os 20 casos originais e acrescentados 18 casos escritos para
+esta avaliação (não são conversas coletadas de usuários): 6 paráfrases, 3 dúvidas
+ambíguas sem contexto, 3 continuações com histórico, 3 pedidos fora do escopo com
+vocabulário de Python e 3 instruções adversas. A avaliação passa `historico` ao
+assistente, separa os resultados por `tipo` e exige todos os esclarecimentos
+corretos além dos critérios anteriores.
+
+As continuações genéricas usam a pergunta anterior mais recente do usuário como
+consulta. Mensagens do assistente não definem o assunto. Sem contexto utilizável,
+o sistema pede esclarecimento; perguntas novas explícitas fazem sua própria
+busca. O modo local reapresenta o exemplo disponível na base, sem prometer gerar
+um exemplo diferente. Uma expansão explícita associa “registros repetidos” a
+“linhas duplicadas”; o limiar global permanece inalterado.
+
+As regras para pedidos adversos e assuntos externos são heurísticas conservadoras
+para intenções conhecidas. Não constituem um classificador semântico completo nem
+uma defesa geral contra prompt injection. Os 38 casos foram usados para orientar
+os ajustes e são testes de regressão, não uma amostra independente de qualidade.
+O modo generativo precisa ser avaliado separadamente com revisão humana.
