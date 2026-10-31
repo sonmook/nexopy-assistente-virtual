@@ -144,3 +144,18 @@ não significa aprovação desse segundo conjunto.
 
 O [feedback voluntário](07-feedback.md) complementa os casos sintéticos; ainda não
 há análise automática desses registros nem evidência de avaliações de usuários reais.
+
+
+## Correções da segunda auditoria
+
+Foram acrescentados testes para os quatro achados: recusa de intenção externa
+mesmo com palavras de programação; aceitação de operações legítimas sobre dados
+meteorológicos, eleitorais, médicos ou de loteria; novas formas de continuação e
+esclarecimento; validação dos parâmetros e rejeição de scores zero/não finitos.
+Pedidos externos explícitos e tentativas de desvio têm precedência sobre operações
+legítimas no mesmo texto. São heurísticas, não classificação semântica completa.
+
+O diagnóstico conhecido de 18 perguntas passou a 15/18, com três falhas de
+paráfrase ainda abertas. A linha de base original de 9/18 foi preservada no
+[relatório](06-diagnostico-independente.md). Não se alteraram os casos nem o limiar
+global de busca para obter essa melhoria.

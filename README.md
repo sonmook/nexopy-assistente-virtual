@@ -135,7 +135,7 @@ python scripts/evaluate.py
 ruff check --isolated --select E9,F .
 ```
 
-A validação local mais recente passou com **59 testes** e **38/38 casos conformes**.
+A validação local mais recente passou com **93 testes** e **38/38 casos conformes**.
 A avaliação roda no modo local, sem chamadas externas:
 
 | Grupo | Casos conformes |
@@ -165,9 +165,11 @@ limitações em [Avaliação e métricas](docs/04-metricas.md).
 ### Diagnóstico com perguntas novas
 
 Um segundo conjunto sintético, escrito separadamente dos casos usados nos ajustes,
-obteve **9/18 casos conformes (50%)** na primeira medição. Ele revelou limitações
-em novas formas de ambiguidade, continuação, domínio externo e desvio de instruções.
-A busca não foi ajustada a esse conjunto nesta entrega.
+obteve **9/18 casos conformes (50%)** na primeira medição. Após corrigir os achados
+da auditoria, o resultado passou a **15/18 (83,33%)**: ambiguidades, continuações,
+pedidos externos e desvios testados passaram; três paráfrases ainda falham na busca.
+Como esses casos já orientaram correções, agora são uma referência conhecida,
+e uma nova medição independente exigirá outro conjunto de perguntas.
 
 ```bash
 python scripts/evaluate.py --cases tests/casos_independentes_v1.json --output-dir outputs/independente-v1 --report-only
@@ -219,6 +221,8 @@ nexopy-assistente-virtual/
 - A base cobre assuntos introdutórios; respostas precisam de revisão humana.
 - Similaridade textual pode selecionar um assunto inadequado ou deixar de reconhecer uma pergunta.
 - Regras de recusa são heurísticas para intenções conhecidas, sem proteção completa contra prompt injection.
+- A classificação distingue operações de programação sobre dados de pedidos externos explícitos; dúvidas fora dos padrões conhecidos ainda podem falhar.
+- `MIN_SIMILARITY` deve ser finito e estar no intervalo `(0, 1]`; `TOP_K` deve ser inteiro positivo. Resultados com similaridade zero ou inválida nunca são usados.
 - No modo local, pedir outro exemplo reapresenta o exemplo disponível na base.
 - As fontes exibidas são os conteúdos recuperados; sua presença não comprova que toda resposta generativa esteja fundamentada.
 - As chaves ficam fora do repositório; mensagens de falha do provedor não são exibidas com seus detalhes internos.

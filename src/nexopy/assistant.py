@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import re
 import unicodedata
 from dataclasses import dataclass
@@ -16,19 +17,35 @@ GREETING_PATTERN = re.compile(
 )
 
 
-# Regras conservadoras para intenções conhecidas; não substituem uma análise
-# semântica de domínio nem garantem resistência a toda injeção de prompt.
-UNSUPPORTED_INTENT = re.compile(
-    r"\b(previsao do tempo|(?:qual sera|como estara).{0,20}(?:clima|tempo)"
-    r"|(?:numeros|resultado).{0,30}loteria|(?:vencera|ganhara).{0,20}eleicao|horoscopo)\b"
+# Heurísticas de intenção: operações sobre dados não são pedidos de previsão
+# ou diagnóstico. Pedidos externos explícitos e desvios têm precedência.
+EXTERNAL_TOPIC = re.compile(
+    r"\b(previsao do tempo|clima|loteria|eleicao|horoscopo|diagnostico|investir)\b"
+)
+EXTERNAL_REQUEST = re.compile(
+    r"\b(?:qual sera|como estara).{0,30}\b(?:clima|tempo)\b"
+    r"|\b(?:preveja|prever|vai chover)\b|\b(?:qual|diga|informe).{0,20}\bprevisao\b"
+    r"|\b(?:quem).{0,30}\b(?:vencera|ganhara)\b"
+    r"|\b(?:quais|preveja).{0,30}\b(?:numeros|resultado).{0,30}loteria\b"
+    r"|\b(?:qual|diga|forneca).{0,25}\bdiagnostico\b|\bdiagnostique\b"
+    r"|\bcomo investir\b|\bficar rico\b"
+)
+PROGRAMMING_OPERATION = re.compile(
+    r"\b(?:ler|carregar|abrir|salvar|filtrar|agrupar|ordenar|contar|criar|validar|analisar)\b"
+    r".{0,60}\b(?:csv|json|arquivo|dataframe|coluna|linhas|tabela|funcao|variavel)\b"
 )
 OVERRIDE_INTENT = re.compile(
-    r"\bignore\b.{0,80}\b(instruc|base|contexto|regra)"
-    r"|\b(revele|mostre|exiba)\b.{0,30}\b(sua|seu)\b.{0,20}\b(chave|senha|token)"
+    r"\b(?:ignore|desconsidere|esqueca)\b.{0,80}\b(?:instruc|base|contexto|regra)"
+    r"|\b(?:revele|mostre|exiba|imprima|exponha)\b.{0,60}"
+    r"\b(?:chave de api|token secreto|senha|sua chave|seu token)\b"
+    r"|\b(?:invente|inventa)\b.{0,30}\bfontes\b"
 )
 FOLLOW_UP = re.compile(
-    r"(?:pode |voce pode )?(?:dar|mostrar) (?:um |outro |mais um )?exemplo"
-    r"|(?:pode |voce pode )?explicar (?:melhor|de novo)"
+    r"(?:(?:pode|voce pode|poderia) )?(?:dar|mostrar|mostre|de|me de) "
+    r"(?:um |outro |mais um )?exemplo"
+    r"|(?:(?:pode|voce pode|poderia) )?(?:explicar|explique) (?:melhor|de novo)"
+    r"|(?:e )?(?:como (?:faco|fazer) )?isso (?:no|na|em) (?:linux|windows|macos)"
+    r"|e agora|nao deu certo"
 )
 AMBIGUOUS = re.compile(r"(?:como |pode )?(?:instalar|usar|fazer|corrigir) (?:isso|isto)")
 
@@ -122,7 +139,13 @@ class NexoPyAssistant:
 
         results = self.knowledge.search(search_question, top_k=self.settings.top_k)
 
-        relevant = [result for result in results if result.score >= self.settings.min_similarity]
+        relevant = [
+            result
+            for result in results
+            if math.isfinite(result.score)
+            and result.score > 0
+            and result.score >= self.settings.min_similarity
+        ]
 
         if not relevant:
             if FOLLOW_UP.fullmatch(normalized):
@@ -164,7 +187,12 @@ class NexoPyAssistant:
 
     @staticmethod
     def _blocked(question: str) -> bool:
-        return bool(UNSUPPORTED_INTENT.search(question) or OVERRIDE_INTENT.search(question))
+        if OVERRIDE_INTENT.search(question):
+            return True
+        operation = PROGRAMMING_OPERATION.search(question)
+        if EXTERNAL_REQUEST.search(question):
+            return True
+        return bool(EXTERNAL_TOPIC.search(question) and not operation)
 
     @staticmethod
     def _clarification() -> AssistantResponse:
@@ -179,6 +207,8 @@ class NexoPyAssistant:
 
     @staticmethod
     def _refusal(confidence: float = 0.0) -> AssistantResponse:
+        if not math.isfinite(confidence) or not 0 <= confidence <= 1:
+            confidence = 0.0
         return AssistantResponse(
             text="Não encontrei informação suficiente na minha base de conhecimento "
             "para responder com segurança. Posso ajudar com Python, Pandas, "

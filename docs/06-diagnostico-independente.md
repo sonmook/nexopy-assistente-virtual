@@ -49,3 +49,21 @@ reconhecer melhor os limites de domínio e melhorar sinônimos na recuperação.
 Antes de ajustar usando estes casos, reserve um próximo conjunto para medir a
 generalização. Os casos de desvio não demonstram extração de segredos: evidenciam
 que o assistente respondeu onde se esperava recusa.
+
+
+## Após correções da segunda auditoria
+
+O mesmo conjunto passou de 9/18 para **15/18 casos conformes (83,33%)**.
+Ambiguidades, continuações, domínio externo e desvios passaram em 2/2 casos cada;
+perguntas inéditas permanecem em 7/10. Os três erros de busca restantes são:
+
+- “Quero registrar as bibliotecas que meu projeto precisa.” recupera `venv-criar`
+  em vez de `pip-requirements`.
+- “Como contar as células vazias antes de decidir se devo apagá-las?” não recupera
+  `pandas-nulos`.
+- “Como obter o total de vendas por loja?” não recupera `pandas-groupby`.
+
+A primeira medição acima permanece como registro histórico. O conjunto não foi
+editado; agora suas falhas conhecidas também orientaram as correções de intenção
+e conversação da auditoria. Por isso, a nova pontuação é uma medida de regressão
+sobre casos conhecidos, não nova evidência independente de generalização.
