@@ -179,13 +179,20 @@ de aprovação da regressão. Consulte as falhas e a metodologia no
 
 ## Feedback das respostas
 
-Abra **“Esta resposta ajudou?”**, escreva um comentário se desejar e envie seu voto.
-O registro contém voto, comentário, fontes e modo, sem copiar a pergunta ou a resposta.
+Abra **“Esta resposta ajudou?”** e selecione **“👍 Ajudou”** ou **“👎 Não ajudou”**.
+Você pode incluir um comentário de até **500 caracteres** antes de enviar. Cada
+resposta aceita uma avaliação; reenvios não duplicam o registro. Uma confirmação
+aparece após a gravação, e falhas permitem tentar novamente.
+
+O registro contém voto, comentário, fontes, modo, ação e horário do envio, sem
+copiar a pergunta ou a resposta.
 Não inclua dados pessoais ou credenciais no comentário.
 
 Os registros ficam em `outputs/feedback.sqlite3`, ignorado pelo Git. O armazenamento
 é local à instância e pode ser perdido se o disco não for preservado. Para configurar
-o caminho e entender os dados registrados, veja [Feedback](docs/07-feedback.md).
+o caminho, defina `NEXOPY_FEEDBACK_PATH` antes de iniciar o Streamlit. Limpar a
+conversa não apaga os votos enviados. Não há envio a serviços externos nem análise
+automática dos comentários. Veja os detalhes em [Feedback](docs/07-feedback.md).
 
 ## Estrutura do projeto
 
@@ -228,9 +235,10 @@ nexopy-assistente-virtual/
 
 ## Próximas evoluções
 
-- Avaliar perguntas inéditas em um conjunto independente.
+- Usar o diagnóstico independente para priorizar correções e reservar novas perguntas para a próxima medição.
 - Ampliar conteúdos, exercícios e níveis de dificuldade.
-- Adicionar feedback sobre respostas e progresso do estudante.
+- Analisar o feedback recebido e definir armazenamento persistente para uma demonstração pública.
+- Adicionar acompanhamento do progresso do estudante.
 - Comparar TF-IDF com embeddings usando os mesmos critérios.
 - Publicar uma demonstração no Streamlit Community Cloud.
 
