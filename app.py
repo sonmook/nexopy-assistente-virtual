@@ -136,6 +136,9 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
+        if message.get("mode"):
+            st.caption(f"Resposta produzida por: {message['mode']}")
+
         if message.get("warning"):
             st.warning(message["warning"])
 
@@ -179,6 +182,7 @@ if prompt:
             response = assistant.answer(prompt, history=history)
 
         st.markdown(response.text)
+        st.caption(f"Resposta produzida por: {response.mode}")
 
         if response.warning:
             st.warning(response.warning)

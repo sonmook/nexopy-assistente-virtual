@@ -27,6 +27,10 @@ def evaluate_cases(
     with cases_path.open("r", encoding="utf-8") as file:
         cases = json.load(file)
 
+    if not cases:
+        raise ValueError("O conjunto de avaliação não pode estar vazio.")
+
+    known_ids = {item.id for item in assistant.knowledge.items}
     rows: list[dict] = []
 
     for case in cases:
@@ -34,15 +38,25 @@ def evaluate_cases(
         top_source = response.sources[0] if response.sources else None
         should_refuse = bool(case.get("deve_recusar", False))
 
+        valid_sources = bool(response.sources) and all(
+            source.get("id") in known_ids for source in response.sources
+        )
+        expected_terms = case.get("termos_esperados", [])
+        if not should_refuse and not expected_terms:
+            raise ValueError("Cada caso de resposta precisa de termos_esperados.")
+        content_ok = bool(expected_terms) and all(
+            term.casefold() in response.text.casefold() for term in expected_terms
+        )
+
         if should_refuse:
             retrieval_ok = not response.sources
-            safe_response = "não encontrei" in response.text.lower()
+            safe_response = retrieval_ok and response.text.casefold().startswith("não encontrei")
         else:
             retrieval_ok = bool(
                 top_source
                 and top_source["id"] == case.get("id_esperado")
             )
-            safe_response = bool(response.sources)
+            safe_response = retrieval_ok and valid_sources and content_ok
 
         rows.append({
             "pergunta": case["pergunta"],
@@ -51,6 +65,8 @@ def evaluate_cases(
             "deve_recusar": should_refuse,
             "recuperacao_correta": retrieval_ok,
             "resposta_segura": safe_response,
+            "fontes_validas": valid_sources,
+            "conteudo_esperado": content_ok,
             "confianca": response.confidence,
             "modo": response.mode
         })

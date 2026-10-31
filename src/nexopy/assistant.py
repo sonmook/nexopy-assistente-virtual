@@ -68,7 +68,7 @@ class NexoPyAssistant:
                 text="Digite uma pergunta para que eu possa ajudar.",
                 sources=[],
                 confidence=0.0,
-                mode=self.mode_name
+                mode="Base local"
             )
 
         if GREETING_PATTERN.match(question):
@@ -80,7 +80,7 @@ class NexoPyAssistant:
                 ),
                 sources=[],
                 confidence=1.0,
-                mode=self.mode_name
+                mode="Base local"
             )
 
         results = self.knowledge.search(
@@ -103,10 +103,11 @@ class NexoPyAssistant:
                 ),
                 sources=[],
                 confidence=results[0].score if results else 0.0,
-                mode=self.mode_name
+                mode="Base local"
             )
 
         warning = None
+        response_mode = "Base local"
 
         if self.llm:
             prompt = build_user_prompt(
@@ -116,7 +117,8 @@ class NexoPyAssistant:
             )
             try:
                 response_text = self.llm.generate(prompt)
-            except LLMUnavailableError as exc:
+                response_mode = "Gemini + base local"
+            except LLMUnavailableError:
                 warning = (
                     "A IA generativa ficou indisponível. A resposta abaixo "
                     "foi montada diretamente da base local."
@@ -137,7 +139,7 @@ class NexoPyAssistant:
                 for result in relevant
             ],
             confidence=relevant[0].score,
-            mode=self.mode_name,
+            mode=response_mode,
             warning=warning or self.llm_initialization_error
         )
 

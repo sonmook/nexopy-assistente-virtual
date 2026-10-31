@@ -27,3 +27,9 @@ jobs:
 
       - name: Executar testes
         run: pytest -q
+
+      - name: Verificar erros estáticos
+        run: ruff check --isolated --select E9,F .
+
+      - name: Avaliar recuperação e conteúdo
+        run: python scripts/evaluate.py

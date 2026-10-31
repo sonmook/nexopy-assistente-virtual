@@ -40,10 +40,14 @@ class GeminiProvider:
             )
         except Exception as exc:
             raise LLMUnavailableError(
-                f"O provedor generativo não respondeu: {exc}"
+                "O provedor generativo não respondeu."
             ) from exc
 
-        output = getattr(interaction, "output_text", "")
+        output = "\n\n".join(
+            block.text.strip()
+            for block in (interaction.outputs or [])
+            if block.type == "text" and block.text.strip()
+        )
         if not output or not output.strip():
             raise LLMUnavailableError("O provedor retornou uma resposta vazia.")
 
