@@ -2,8 +2,7 @@ from types import SimpleNamespace
 from unittest.mock import Mock
 
 import pytest
-from google.genai._interactions.types.interaction import Interaction
-from google.genai._interactions.types.text_content import TextContent
+from google.genai.interactions import Interaction
 
 from nexopy.assistant import NexoPyAssistant
 from nexopy.llm import GeminiProvider, LLMUnavailableError
@@ -18,23 +17,49 @@ def provider_with_response(response):
     return provider
 
 
-def test_reads_sdk_text_blocks_and_ignores_other_content():
-    response = Interaction.model_construct(
-        outputs=[
-            TextContent(type="text", text=" Primeira parte. "),
-            SimpleNamespace(type="image"),
-            TextContent(type="text", text="Segunda parte."),
+def sdk_response(contents, status="completed"):
+    return Interaction.model_validate(
+        {
+            "status": status,
+            "steps": [{"type": "model_output", "content": contents}],
+        }
+    )
+
+
+def test_reads_sdk_final_text_from_steps():
+    response = sdk_response(
+        [
+            {"type": "text", "text": " Primeira parte. "},
+            {"type": "text", "text": "Segunda parte. "},
         ]
     )
     provider = provider_with_response(response)
-    assert provider.generate("pergunta") == "Primeira parte.\n\nSegunda parte."
-    assert provider._client.interactions.create.call_args.kwargs["input"] == "pergunta"
+    assert provider.generate("pergunta") == "Primeira parte. Segunda parte."
+    arguments = provider._client.interactions.create.call_args.kwargs
+    assert arguments["input"] == "pergunta"
+    assert arguments["timeout"] == 45
+    assert arguments["model"] == "test-model"
+    assert arguments["system_instruction"]
 
 
-@pytest.mark.parametrize("outputs", [None, [], [TextContent(type="text", text="  ")]])
-def test_empty_sdk_response_is_unavailable(outputs):
-    provider = provider_with_response(Interaction.model_construct(outputs=outputs))
+@pytest.mark.parametrize("contents", [[], [{"type": "text", "text": "  "}]])
+def test_empty_sdk_response_is_unavailable(contents):
+    provider = provider_with_response(sdk_response(contents))
     with pytest.raises(LLMUnavailableError, match="vazia"):
+        provider.generate("pergunta")
+
+
+@pytest.mark.parametrize("status", ["failed", "incomplete", "requires_action"])
+def test_partial_or_failed_response_is_not_shown_as_complete(status):
+    provider = provider_with_response(
+        sdk_response(
+            [
+                {"type": "text", "text": "Resposta parcial"},
+            ],
+            status=status,
+        )
+    )
+    with pytest.raises(LLMUnavailableError, match="concluiu"):
         provider.generate("pergunta")
 
 

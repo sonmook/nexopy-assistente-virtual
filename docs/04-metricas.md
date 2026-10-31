@@ -91,3 +91,12 @@ valida disponibilidade, acesso ou comportamento real do serviço Gemini.
 
 Cada resposta registra o modo efetivamente utilizado e a interface o exibe junto
 ao conteúdo. A indicação na barra lateral representa o provedor configurado.
+
+
+## Contrato do SDK Gemini 2.x
+
+A integração lê `Interaction.output_text`, calculado pelo SDK a partir dos
+`steps` da resposta atual. Os testes usam tipos públicos do SDK e validam esse
+formato, além de respostas vazias, incompletas e falhas. Apenas interações com
+status `completed` são apresentadas como respostas generativas. A chamada tem
+um limite de 45 segundos; erros acionam a base local.

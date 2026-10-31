@@ -115,6 +115,12 @@ O arquivo `.env` não é necessário nesse modo.
 
 ## Ativar o Gemini
 
+A integração usa o SDK `google-genai>=2.34,<3.0` e o formato atual da API
+Interactions. Atualize as dependências com `python -m pip install -r requirements.txt`
+se estiver usando uma instalação anterior. Versões 1.x do SDK usam um esquema
+que a API já não aceita.
+
+
 1. Copie `.env.example` para `.env`;
 2. Preencha sua chave;
 3. Altere `USE_GEMINI` para `true`.

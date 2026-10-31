@@ -31,6 +31,7 @@ class GeminiProvider:
         try:
             interaction = self._client.interactions.create(
                 model=self.model,
+                timeout=45,
                 system_instruction=SYSTEM_PROMPT,
                 input=prompt,
                 generation_config={
@@ -43,11 +44,11 @@ class GeminiProvider:
                 "O provedor generativo não respondeu."
             ) from exc
 
-        output = "\n\n".join(
-            block.text.strip()
-            for block in (interaction.outputs or [])
-            if block.type == "text" and block.text.strip()
-        )
+        if interaction.status != "completed":
+            raise LLMUnavailableError("O provedor não concluiu a resposta.")
+
+        # SDK 2.x expõe o texto final calculado a partir dos steps.
+        output = interaction.output_text
         if not output or not output.strip():
             raise LLMUnavailableError("O provedor retornou uma resposta vazia.")
 
