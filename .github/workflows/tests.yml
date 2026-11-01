@@ -45,7 +45,7 @@ jobs:
           name: avaliacao-independente-v1
           path: outputs/independente-v1/
 
-      - name: Diagnóstico independente v2 (sem limiar de aprovação)
+      - name: Diagnóstico v2 conhecido (sem limiar de aprovação)
         run: >-
           python scripts/evaluate.py --cases tests/casos_independentes_v2.json
           --output-dir outputs/independente-v2 --report-only

@@ -173,3 +173,13 @@ Após essa mudança, a regressão segue em 38/38 e o diagnóstico conhecido v1 e
 18/18. O novo [diagnóstico v2](08-diagnostico-v2.md), reservado antes da alteração,
 obteve 10/12. Falhas de v2 não foram usadas para ajustar esta versão; o CI publica
 os seus resultados separadamente, sem limiar de aprovação.
+
+
+## Consolidação do diagnóstico v2
+
+As duas falhas conhecidas do diagnóstico v2 foram corrigidas com testes para
+indexação normal, erros de índice, pedidos nutricionais e operações legítimas
+sobre tabelas de calorias. A suíte local passa com 121 testes; regressão 38/38,
+v1 18/18 e v2 12/12. V1 e v2 agora foram usados em ajustes e não são conjuntos
+independentes para demonstrar generalização futura. Os resultados iniciais foram
+preservados nos relatórios e os JSONs de casos não foram alterados.

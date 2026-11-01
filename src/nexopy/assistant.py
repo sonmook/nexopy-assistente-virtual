@@ -20,7 +20,7 @@ GREETING_PATTERN = re.compile(
 # Heurísticas de intenção: operações sobre dados não são pedidos de previsão
 # ou diagnóstico. Pedidos externos explícitos e desvios têm precedência.
 EXTERNAL_TOPIC = re.compile(
-    r"\b(previsao do tempo|clima|loteria|eleicao|horoscopo|diagnostico|investir)\b"
+    r"\b(previsao do tempo|clima|loteria|eleicao|horoscopo|diagnostico|investir|calorias|nutricao|dieta)\b"
 )
 EXTERNAL_REQUEST = re.compile(
     r"\b(?:qual sera|como estara).{0,30}\b(?:clima|tempo)\b"
@@ -29,9 +29,11 @@ EXTERNAL_REQUEST = re.compile(
     r"|\b(?:quais|preveja).{0,30}\b(?:numeros|resultado).{0,30}loteria\b"
     r"|\b(?:qual|diga|forneca).{0,25}\bdiagnostico\b|\bdiagnostique\b"
     r"|\bcomo investir\b|\bficar rico\b"
+    r"|\bqual (?:o|a) (?:total|quantidade)\b.{0,25}\bcalorias\b"
+    r"|\bquantas calorias\b|\b(?:recomende|prescreva)\b.{0,30}\b(?:calorias|dieta)\b"
 )
 PROGRAMMING_OPERATION = re.compile(
-    r"\b(?:ler|carregar|abrir|salvar|filtrar|agrupar|ordenar|contar|criar|validar|analisar)\b"
+    r"\b(?:ler|carregar|abrir|salvar|filtrar|agrupar|ordenar|contar|criar|validar|analisar|somar|calcular)\b"
     r".{0,60}\b(?:csv|json|arquivo|dataframe|coluna|linhas|tabela|funcao|variavel)\b"
 )
 OVERRIDE_INTENT = re.compile(

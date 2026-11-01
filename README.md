@@ -135,7 +135,7 @@ python scripts/evaluate.py
 ruff check --isolated --select E9,F .
 ```
 
-A validação local mais recente passou com **106 testes** e **38/38 casos conformes**.
+A validação local mais recente passou com **121 testes** e **38/38 casos conformes**.
 A avaliação roda no modo local, sem chamadas externas:
 
 | Grupo | Casos conformes |
@@ -181,9 +181,11 @@ de aprovação da regressão. Consulte as falhas e a metodologia no
 [diagnóstico v1](docs/06-diagnostico-independente.md).
 
 Um novo conjunto de 12 casos foi reservado antes da alteração de busca e obteve
-**10/12 (83,33%)**. As duas falhas foram preservadas, sem novos ajustes a esses
-casos nesta entrega. A metodologia e os erros estão no
-[diagnóstico v2](docs/08-diagnostico-v2.md).
+**10/12 (83,33%)** na primeira medição. As duas falhas foram posteriormente
+corrigidas e o resultado atual é **12/12 (100%)**, com testes que distinguem
+indexação de listas de `IndexError` e pedidos de nutrição de operações sobre dados.
+O conjunto v2 agora também é conhecido e usado como regressão; a metodologia e
+os resultados históricos estão no [diagnóstico v2](docs/08-diagnostico-v2.md).
 
 ```bash
 python scripts/evaluate.py --cases tests/casos_independentes_v2.json --output-dir outputs/independente-v2 --report-only

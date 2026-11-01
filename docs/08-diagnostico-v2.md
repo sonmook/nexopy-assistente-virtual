@@ -43,3 +43,24 @@ python scripts/evaluate.py --cases tests/casos_independentes_v2.json --output-di
 O CI salva resultados separados como `avaliacao-independente-v2`. `--report-only`
 relata as falhas sem usá-las como critério de aprovação. A regressão de 38 casos e
 os testes dos 18 casos conhecidos de v1 continuam obrigatórios.
+
+
+## Correção das duas falhas conhecidas
+
+Após a primeira medição, os dois casos foram usados para orientar correções e
+receberam testes de regressão com variações. A busca expande acesso normal a
+posições de listas com termos de indexação, sem aplicar essa expansão quando
+há indícios explícitos de erro ou posição inexistente. A classificação de intenção
+recusa pedidos nutricionais, mas permite operações de programação sobre dados
+de nutrição, incluindo leitura de CSV e soma de colunas em Pandas.
+
+O resultado atual é **12/12 (100%)**. A primeira medição de 10/12 permanece acima
+como histórico; os casos não foram editados. O conjunto deixou de ser independente
+para medir melhorias futuras. Os testes dos 12 casos passam a ser obrigatórios,
+embora a etapa de relatório no CI continue apenas informativa. As regras de intenção
+são heurísticas e esse resultado não prova segurança geral ou generalização.
+
+Antes dessas correções, foi verificada a execução do GitHub Actions para
+`a9caa5c`: [Tests, execução 41247217029](https://github.com/sonmook/nexopy-assistente-virtual/actions/runs/41247217029)
+terminou com `success`. Essa evidência pertence à versão anterior; o resultado
+local das correções não substitui uma execução remota após seu envio.

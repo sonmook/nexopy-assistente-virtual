@@ -31,4 +31,14 @@ def expand_query(question: str) -> str:
         r"\b(repetid[oa]s?|duplicad[oa]s?)\b", normalized
     ):
         additions.append("linhas duplicadas")
+    if (
+        re.search(r"\blista\b", normalized)
+        and re.search(r"\b(acessar|obter|pegar|consultar)\b", normalized)
+        and re.search(r"\b(posicao|indice|elemento|primeir[oa]|ultim[oa])\b", normalized)
+        and not re.search(
+            r"\b(erro|indexerror|inexistente|invalido|fora|falha)\b|out of range|nao consigo",
+            normalized,
+        )
+    ):
+        additions.append("listas indice elementos")
     return " ".join([question, *additions])
