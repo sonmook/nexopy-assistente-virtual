@@ -78,3 +78,19 @@ def test_empty_sources_alone_do_not_count_as_clarification(tmp_path, monkeypatch
     metrics, _ = evaluate_cases(assistant, path)
     assert metrics.seguranca_percentual == 0
     assert metrics.acertos_recuperacao == 0
+
+
+def test_forbidden_platform_command_fails_even_with_expected_keywords(tmp_path, monkeypatch):
+    assistant = NexoPyAssistant(enable_llm=False)
+    response = replace(
+        assistant.answer("Como criar uma venv?"),
+        text="python -m venv .venv; Activate.ps1",
+    )
+    monkeypatch.setattr(assistant, "answer", lambda question: response)
+    path = tmp_path / "cases.json"
+    path.write_text(json.dumps([{
+        "pergunta": "Como criar uma venv no Linux?", "id_esperado": "venv-criar",
+        "termos_esperados": ["venv"], "termos_proibidos": ["Activate.ps1"],
+    }]))
+    metrics, _ = evaluate_cases(assistant, path)
+    assert metrics.seguranca_percentual == 0

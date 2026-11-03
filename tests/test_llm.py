@@ -1,5 +1,5 @@
 from types import SimpleNamespace
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import pytest
 from google.genai.interactions import Interaction
@@ -9,8 +9,8 @@ from nexopy.llm import GeminiProvider, LLMUnavailableError
 
 
 def provider_with_response(response):
-    provider = object.__new__(GeminiProvider)
-    provider.model = "test-model"
+    with patch("google.genai.Client"):
+        provider = GeminiProvider(api_key="test-key", model="test-model")
     provider._client = SimpleNamespace(
         interactions=SimpleNamespace(create=Mock(return_value=response))
     )
@@ -40,6 +40,8 @@ def test_reads_sdk_final_text_from_steps():
     assert arguments["timeout"] == 45
     assert arguments["model"] == "test-model"
     assert arguments["system_instruction"]
+    assert arguments["store"] is False
+    assert arguments["generation_config"]["max_output_tokens"] == 1024
 
 
 @pytest.mark.parametrize("contents", [[], [{"type": "text", "text": "  "}]])
@@ -100,3 +102,64 @@ def test_initialization_failure_keeps_local_answer(monkeypatch):
     assert response.mode == "Base local"
     assert response.warning == "indisponível"
     assert response.sources[0]["id"] == "pandas-dataframe"
+
+
+def test_rate_and_daily_limits_expire_without_reset_on_failure(monkeypatch):
+    now = [0.0]
+    monkeypatch.setattr("nexopy.llm.monotonic", lambda: now[0])
+    provider = provider_with_response(sdk_response([{"type": "text", "text": "ok"}]))
+    provider.requests_per_minute = 1
+    provider.requests_per_day = 2
+    assert provider.generate("question") == "ok"
+    with pytest.raises(LLMUnavailableError, match="Limite"):
+        provider.generate("question")
+    now[0] = 60
+    provider._client.interactions.create.side_effect = RuntimeError("failure")
+    with pytest.raises(LLMUnavailableError):
+        provider.generate("question")
+    now[0] = 120
+    with pytest.raises(LLMUnavailableError, match="Limite"):
+        provider.generate("question")
+    assert provider._client.interactions.create.call_count == 2
+    now[0] = 86400
+    provider._client.interactions.create.side_effect = None
+    assert provider.generate("question") == "ok"
+
+
+def test_concurrent_calls_cannot_exceed_shared_quota():
+    from concurrent.futures import ThreadPoolExecutor
+
+    provider = provider_with_response(sdk_response([{"type": "text", "text": "ok"}]))
+    provider.requests_per_minute = 3
+    def attempt(_):
+        try:
+            provider.generate("question")
+            return True
+        except LLMUnavailableError:
+            return False
+    with ThreadPoolExecutor(max_workers=10) as pool:
+        assert sum(pool.map(attempt, range(20))) == 3
+    assert provider._client.interactions.create.call_count == 3
+
+
+def test_oversized_context_never_calls_provider_or_consumes_quota():
+    provider = provider_with_response(None)
+    provider.max_prompt_chars = 10
+    with pytest.raises(LLMUnavailableError, match="contexto"):
+        provider.generate("x" * 11)
+    provider._client.interactions.create.assert_not_called()
+    assert not provider._requests
+
+
+def test_quota_exhaustion_returns_local_answer():
+    assistant = NexoPyAssistant(enable_llm=False)
+    local = assistant.answer("O que é um DataFrame?")
+    provider = provider_with_response(sdk_response([{"type": "text", "text": "ok"}]))
+    provider.requests_per_day = 1
+    provider.generate("first request")
+    assistant.llm = provider
+    result = assistant.answer("O que é um DataFrame?")
+    assert result.text == local.text
+    assert result.mode == "Base local"
+    assert result.warning
+    assert provider._client.interactions.create.call_count == 1

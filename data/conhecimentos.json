@@ -87,7 +87,9 @@
     "perguntas": [
       "O que é uma lista em Python?",
       "Como adicionar itens em uma lista?",
-      "Como acessar um elemento da lista?"
+      "Como acessar um elemento da lista?",
+      "Qual a diferença entre lista e tupla?",
+      "Como acessar o último elemento de uma lista?"
     ],
     "palavras_chave": [
       "lista",
@@ -96,8 +98,8 @@
       "índice",
       "coleção"
     ],
-    "resposta": "Uma lista armazena vários valores em uma única variável. Os elementos são ordenados e podem ser acessados por índice, começando em zero.",
-    "exemplo": "frutas = [\"maçã\", \"banana\"]\nfrutas.append(\"uva\")\nprint(frutas[0])",
+    "resposta": "Uma lista armazena vários valores em uma única variável. Os elementos são ordenados e podem ser acessados por índice, começando em zero. Para acessar o último elemento de uma lista não vazia, use o índice -1. Listas são mutáveis: permitem alterar, adicionar e remover elementos. Tuplas são sequências imutáveis: seus elementos não podem ser substituídos após a criação; são escritas com parênteses, como (1, 2).",
+    "exemplo": "frutas = [\"maçã\", \"banana\"]\nfrutas.append(\"uva\")\nprint(frutas[0])\nprint(frutas[-1])  # último elemento: uva\ncoordenadas = (10, 20)  # tupla imutável",
     "proximo_passo": "Depois, estude tuplas, conjuntos e dicionários."
   },
   {
@@ -337,7 +339,12 @@
     ],
     "resposta": "Um ambiente virtual isola as bibliotecas do projeto. Crie com `python -m venv .venv` e ative antes de instalar as dependências.",
     "exemplo": "python -m venv .venv\n.\\.venv\\Scripts\\Activate.ps1  # PowerShell",
-    "proximo_passo": "Depois, instale as dependências com python -m pip install -r requirements.txt."
+    "proximo_passo": "Depois, instale as dependências com python -m pip install -r requirements.txt.",
+    "exemplos_por_plataforma": {
+      "linux": "python3 -m venv .venv\nsource .venv/bin/activate",
+      "macos": "python3 -m venv .venv\nsource .venv/bin/activate",
+      "windows": "python -m venv .venv\n.\\.venv\\Scripts\\Activate.ps1  # PowerShell"
+    }
   },
   {
     "id": "pip-requirements",

@@ -232,6 +232,7 @@ nexopy-assistente-virtual/
 
 - A base cobre assuntos introdutórios; respostas precisam de revisão humana.
 - Similaridade textual pode selecionar um assunto inadequado ou deixar de reconhecer uma pergunta.
+- As perguntas têm limite de tamanho, e o Gemini usa cotas por processo com resposta local alternativa. Consulte [limites e privacidade](docs/09-correcoes-auditoria.md).
 - Regras de recusa são heurísticas para intenções conhecidas, sem proteção completa contra prompt injection.
 - A classificação distingue operações de programação sobre dados de pedidos externos explícitos; dúvidas fora dos padrões conhecidos ainda podem falhar.
 - `MIN_SIMILARITY` deve ser finito e estar no intervalo `(0, 1]`; `TOP_K` deve ser inteiro positivo. Resultados com similaridade zero ou inválida nunca são usados.

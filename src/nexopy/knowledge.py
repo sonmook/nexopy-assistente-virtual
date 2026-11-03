@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -32,6 +32,7 @@ class KnowledgeItem:
     resposta: str
     exemplo: str
     proximo_passo: str
+    exemplos_por_plataforma: dict[str, str] = field(default_factory=dict)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "KnowledgeItem":
@@ -43,7 +44,8 @@ class KnowledgeItem:
             palavras_chave=list(data.get("palavras_chave", [])),
             resposta=data["resposta"],
             exemplo=data.get("exemplo", ""),
-            proximo_passo=data.get("proximo_passo", "")
+            proximo_passo=data.get("proximo_passo", ""),
+            exemplos_por_plataforma=dict(data.get("exemplos_por_plataforma", {}))
         )
 
     def searchable_text(self) -> str:
@@ -63,6 +65,7 @@ class KnowledgeItem:
             f"Categoria: {self.categoria}\n"
             f"Explicação: {self.resposta}\n"
             f"Exemplo: {self.exemplo}\n"
+            f"Exemplos por plataforma: {json.dumps(self.exemplos_por_plataforma, ensure_ascii=False)}\n"
             f"Próximo passo: {self.proximo_passo}"
         )
 

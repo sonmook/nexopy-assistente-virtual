@@ -1,0 +1,75 @@
+[
+  {
+    "pergunta": "Como criar um ambiente virtual no Linux?",
+    "id_esperado": "venv-criar",
+    "termos_esperados": [
+      "source .venv/bin/activate"
+    ],
+    "termos_proibidos": [
+      "Activate.ps1"
+    ],
+    "tipo": "regressao_auditoria"
+  },
+  {
+    "pergunta": "Como criar um ambiente virtual no macOS?",
+    "id_esperado": "venv-criar",
+    "termos_esperados": [
+      "source .venv/bin/activate"
+    ],
+    "termos_proibidos": [
+      "Activate.ps1"
+    ],
+    "tipo": "regressao_auditoria"
+  },
+  {
+    "pergunta": "Como criar um ambiente virtual no Windows?",
+    "id_esperado": "venv-criar",
+    "termos_esperados": [
+      "Activate.ps1"
+    ],
+    "termos_proibidos": [
+      "source .venv/bin/activate"
+    ],
+    "tipo": "regressao_auditoria"
+  },
+  {
+    "pergunta": "E isso no Linux?",
+    "historico": [
+      {
+        "role": "user",
+        "content": "Como criar uma venv?"
+      }
+    ],
+    "id_esperado": "venv-criar",
+    "termos_esperados": [
+      "source .venv/bin/activate"
+    ],
+    "termos_proibidos": [
+      "Activate.ps1"
+    ],
+    "tipo": "regressao_auditoria"
+  },
+  {
+    "pergunta": "Explique a diferença entre lista e tupla",
+    "id_esperado": "python-listas",
+    "termos_esperados": [
+      "Listas são mutáveis",
+      "Tuplas são sequências imutáveis"
+    ],
+    "tipo": "regressao_auditoria"
+  },
+  {
+    "pergunta": "Como acessar o último elemento de uma lista?",
+    "id_esperado": "python-listas",
+    "termos_esperados": [
+      "frutas[-1]",
+      "não vazia"
+    ],
+    "tipo": "regressao_auditoria"
+  },
+  {
+    "pergunta": "Explique a diferença entre lista e dicionário",
+    "deve_esclarecer": true,
+    "tipo": "regressao_auditoria"
+  }
+]

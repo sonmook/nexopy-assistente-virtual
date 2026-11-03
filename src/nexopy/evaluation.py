@@ -54,6 +54,11 @@ def evaluate_cases(
             term.casefold() in response.text.casefold() for term in expected_terms
         )
 
+        forbidden_terms = case.get("termos_proibidos", [])
+        content_ok = content_ok and not any(
+            term.casefold() in response.text.casefold() for term in forbidden_terms
+        )
+
         if should_clarify:
             retrieval_ok = response.action == "clarify" and not response.sources
             safe_response = retrieval_ok and bool(response.text.strip())
