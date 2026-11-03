@@ -14,27 +14,43 @@ Com Inteligência Artificial**, da DIO.
 
 ## O sistema em imagens
 
-Capturas reais da aplicação em execução no **modo local**, usando perguntas de
-demonstração.
+Conheça o fluxo do NexoPy pelas capturas reais da aplicação no **modo local**.
+Clique nas imagens para abrir a versão em tamanho original.
 
-### Tela inicial
+[Tela inicial](#1-tela-inicial) · [Resposta com fontes](#2-resposta-com-exemplo-e-fontes) · [Pedido de esclarecimento](#3-esclarecimento-de-perguntas-ambíguas)
 
-Chat com sugestões de perguntas, assuntos disponíveis e indicação do modo de execução.
+### 1. Tela inicial
 
-![Tela inicial do NexoPy com sugestões de perguntas e os 33 conteúdos cadastrados](assets/screenshots/inicio.png)
+Ao abrir o sistema, a barra lateral mostra os **33 conteúdos cadastrados**, o modo
+de execução e os assuntos disponíveis. No chat, você pode digitar uma dúvida ou
+selecionar uma das perguntas sugeridas.
 
-### Resposta com exemplo e fontes
+[![Tela inicial do NexoPy em tema escuro, com barra lateral e três sugestões de perguntas](assets/screenshots/inicio.png)](assets/screenshots/inicio.png)
 
-O assistente apresenta uma explicação, um exemplo de código, um próximo passo e as
-fontes recuperadas. Cada resposta informa se foi produzida pela base local ou pelo Gemini.
+*Visão geral da interface antes de iniciar uma conversa.*
 
-![Resposta sobre DataFrame com exemplo em Python e fontes consultadas expandidas](assets/screenshots/resposta-com-fontes.png)
+### 2. Resposta com exemplo e fontes
 
-### Esclarecimento de perguntas ambíguas
+Na pergunta **“O que é um DataFrame?”**, o assistente apresenta uma explicação,
+um exemplo em Python e um próximo passo para o estudo. A indicação **“Base local”**
+identifica a origem da resposta; o painel **“Fontes consultadas”** mostra o conteúdo
+recuperado e sua similaridade com a pergunta.
 
-Quando falta contexto, o NexoPy pede mais detalhes antes de selecionar um assunto.
+[![Conversa sobre DataFrame com explicação, código Python, próximo passo e painel de fontes consultadas aberto](assets/screenshots/resposta-com-fontes.png)](assets/screenshots/resposta-com-fontes.png)
 
-![NexoPy pedindo o assunto ou biblioteca após a pergunta Como instalar isso](assets/screenshots/esclarecimento.png)
+*Exemplo de resposta educacional com a fonte consultada visível.*
+
+### 3. Esclarecimento de perguntas ambíguas
+
+Quando recebe **“Como instalar isso?”** sem um assunto anterior, o NexoPy pede
+mais detalhes sobre o assunto, biblioteca ou erro antes de responder.
+
+[![NexoPy solicitando o assunto, biblioteca ou erro após receber a pergunta ambígua Como instalar isso](assets/screenshots/esclarecimento.png)](assets/screenshots/esclarecimento.png)
+
+*Pedido de esclarecimento quando a pergunta não fornece contexto suficiente.*
+
+As capturas mostram exemplos de demonstração, sem chamadas ao Gemini.
+Os arquivos originais estão em [assets/screenshots](assets/screenshots/).
 
 ## Recursos
 
@@ -135,8 +151,10 @@ python scripts/evaluate.py
 ruff check --isolated --select E9,F .
 ```
 
-A validação local mais recente passou com **121 testes** e **38/38 casos conformes**.
-A avaliação roda no modo local, sem chamadas externas:
+A validação local mais recente passou com **153 testes** e **75/75 casos conformes**:
+38 de referência, 18 do diagnóstico v1, 12 do diagnóstico v2 e 7 regressões da auditoria.
+A tabela abaixo detalha os 38 casos de referência. A avaliação roda no modo local,
+sem chamadas externas:
 
 | Grupo | Casos conformes |
 | --- | ---: |
