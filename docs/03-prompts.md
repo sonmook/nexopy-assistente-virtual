@@ -19,7 +19,7 @@ Ele define que o NexoPy deve:
 A entrada enviada ao modelo contém:
 
 1. contexto recuperado da base;
-2. histórico recente da conversa;
+2. título do assunto recuperado nas continuações, sem copiar o histórico;
 3. pergunta atual;
 4. instrução para responder somente com o contexto.
 

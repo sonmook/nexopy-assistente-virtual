@@ -121,6 +121,12 @@ with st.sidebar:
     )
     st.metric("Conteúdos cadastrados", len(assistant.knowledge.items))
     st.write(f"**Modo:** {assistant.mode_name}")
+    if assistant.llm:
+        st.info(
+            "No modo Gemini, sua pergunta e os conteúdos recuperados são enviados ao Google. "
+            "O histórico da conversa não é enviado. Não informe dados pessoais, senhas ou chaves. "
+            "Em continuações, enviamos somente o título do assunto e a nova pergunta."
+        )
     st.write(
         f"**Similaridade mínima:** "
         f"{assistant.settings.min_similarity:.2f}"
@@ -198,7 +204,8 @@ for message in st.session_state.messages:
             render_feedback(message)
 
 typed_prompt = st.chat_input(
-    "Digite sua dúvida sobre Python, Pandas, automação ou IA..."
+    "Digite sua dúvida sobre Python, Pandas, automação ou IA...",
+    max_chars=assistant.settings.max_question_chars
 )
 prompt = selected_suggestion or typed_prompt
 
@@ -210,6 +217,8 @@ if prompt:
 
     with st.chat_message("user"):
         st.markdown(prompt)
+
+    st.session_state.messages = st.session_state.messages[-40:]
 
     history = [
         {"role": item["role"], "content": item["content"]}
@@ -254,4 +263,5 @@ if prompt:
         "id": str(uuid4())
     })
 
+    st.session_state.messages = st.session_state.messages[-40:]
     st.rerun()

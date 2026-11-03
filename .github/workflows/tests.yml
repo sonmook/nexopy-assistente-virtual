@@ -34,6 +34,11 @@ jobs:
       - name: Avaliar recuperação e conteúdo
         run: python scripts/evaluate.py
 
+      - name: Verificar regressões da auditoria
+        run: >-
+          python scripts/evaluate.py --cases tests/casos_auditoria.json
+          --output-dir outputs/auditoria
+
       - name: Diagnóstico v1 conhecido (sem limiar de aprovação)
         run: >-
           python scripts/evaluate.py --cases tests/casos_independentes_v1.json

@@ -83,7 +83,11 @@ class NexoPyAssistant:
         if use_llm:
             try:
                 self.llm = GeminiProvider(
-                    api_key=self.settings.gemini_api_key, model=self.settings.gemini_model
+                    api_key=self.settings.gemini_api_key, model=self.settings.gemini_model,
+                    max_prompt_chars=self.settings.max_prompt_chars,
+                    max_output_tokens=self.settings.gemini_max_output_tokens,
+                    requests_per_minute=self.settings.gemini_requests_per_minute,
+                    requests_per_day=self.settings.gemini_requests_per_day,
                 )
             except (ValueError, LLMUnavailableError) as exc:
                 self.llm_initialization_error = str(exc)
@@ -95,6 +99,11 @@ class NexoPyAssistant:
     def answer(
         self, question: str, history: list[dict[str, str]] | None = None
     ) -> AssistantResponse:
+        if len(question) > self.settings.max_question_chars:
+            return AssistantResponse(
+                text=f"Envie uma pergunta de até {self.settings.max_question_chars} caracteres.",
+                sources=[], confidence=0.0, mode="Base local", action="clarify",
+            )
         question = question.strip()
 
         if not question:
@@ -133,8 +142,10 @@ class NexoPyAssistant:
                 ),
                 "",
             )
-            if not previous or self._blocked(normalize(previous)):
+            if (not previous or len(previous) > self.settings.max_question_chars
+                    or self._blocked(normalize(previous))):
                 return self._clarification()
+            # O histórico é usado somente na recuperação local, nunca no prompt remoto.
             search_question = previous
         if AMBIGUOUS.fullmatch(normalize(search_question)):
             return self._clarification()
@@ -150,15 +161,26 @@ class NexoPyAssistant:
         ]
 
         if not relevant:
-            if FOLLOW_UP.fullmatch(normalized):
+            if FOLLOW_UP.fullmatch(normalized) or "diferenca entre" in normalized:
                 return self._clarification()
             return self._refusal(results[0].score if results else 0.0)
+
+        # Conceitos pedidos explicitamente precisam estar cobertos pela fonte principal.
+        # Evita responder apenas a metade conhecida de comparações e pedidos compostos.
+        requested = set(re.findall(r"\b(?:tuplas?|dicionarios?|conjuntos?)\b", normalize(search_question)))
+        coverage = normalize(relevant[0].item.resposta + " " + relevant[0].item.exemplo)
+        if any(term not in coverage for term in requested):
+            return self._clarification()
 
         warning = None
         response_mode = "Base local"
 
         if self.llm:
-            prompt = build_user_prompt(question=question, results=relevant, recent_history=history)
+            provider_question = question
+            if FOLLOW_UP.fullmatch(normalized):
+                # Referência confiável da base em vez de copiar a mensagem anterior.
+                provider_question = f"Assunto: {relevant[0].item.titulo}. {question}"
+            prompt = build_user_prompt(question=provider_question, results=relevant)
             try:
                 response_text = self.llm.generate(prompt)
                 response_mode = "Gemini + base local"
@@ -167,9 +189,9 @@ class NexoPyAssistant:
                     "A IA generativa ficou indisponível. A resposta abaixo "
                     "foi montada diretamente da base local."
                 )
-                response_text = self._build_local_answer(relevant)
+                response_text = self._build_local_answer(relevant, question)
         else:
-            response_text = self._build_local_answer(relevant)
+            response_text = self._build_local_answer(relevant, question)
 
         return AssistantResponse(
             text=response_text,
@@ -222,13 +244,26 @@ class NexoPyAssistant:
         )
 
     @staticmethod
-    def _build_local_answer(results: list[SearchResult]) -> str:
+    def _build_local_answer(results: list[SearchResult], question: str = "") -> str:
         principal = results[0].item
 
         partes = [principal.resposta]
 
-        if principal.exemplo:
-            partes.append(f"**Exemplo:**\n```python\n{principal.exemplo}\n```")
+        example = principal.exemplo
+        language = "python"
+        if principal.exemplos_por_plataforma:
+            platforms = re.findall(r"\b(linux|macos|windows)\b", normalize(question))
+            platform = platforms[-1] if platforms else None
+            examples = principal.exemplos_por_plataforma
+            if platform in examples:
+                example = examples[platform]
+            else:
+                example = "\n\n".join(f"# {name}\n{code}" for name, code in examples.items())
+            language = "bash" if platform in {"linux", "macos"} else "powershell"
+            if platform is None:
+                language = "text"
+        if example:
+            partes.append(f"**Exemplo:**\n```{language}\n{example}\n```")
 
         if principal.proximo_passo:
             partes.append(f"**Próximo passo:** {principal.proximo_passo}")
